@@ -32,4 +32,7 @@ uninstall:
 test:
 	cd $@ && $(MAKE) $@ && ./$@
 
-.PHONY: clean all test install uninstall
+debug: CFLAGS+=-g
+debug: all
+
+.PHONY: clean all test install uninstall debug
