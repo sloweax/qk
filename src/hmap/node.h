@@ -1,8 +1,9 @@
+#pragma once
 #include "../../include/qk.h"
 #include "../../include/qk/hmap.h"
 #include <stdlib.h>
 
-QKAPI qk_hmap_node *qk_hmap_node_create(void *k, void *v)
+static qk_hmap_node *create_node(void *k, void *v)
 {
     qk_hmap_node *n = QK_MALLOC(sizeof(qk_hmap_node));
     if (n == NULL) return n;
@@ -12,7 +13,9 @@ QKAPI qk_hmap_node *qk_hmap_node_create(void *k, void *v)
     return n;
 }
 
-QKAPI void qk_hmap_node_free(qk_hmap_node* node)
+static void free_node(qk_hmap *m, qk_hmap_node *n)
 {
-    QK_FREE(node);
+    if (m->free_key)   m->free_key(n->key);
+    if (m->free_value) m->free_value(n->value);
+    QK_FREE(n);
 }

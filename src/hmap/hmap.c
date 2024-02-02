@@ -1,16 +1,8 @@
 #include "../../include/qk.h"
 #include "../../include/qk/hmap.h"
+#include "node.h"
 #include <stdlib.h>
 #include <string.h>
-
-static void free_node(qk_hmap *m, qk_hmap_node *n);
-
-static void free_node(qk_hmap *m, qk_hmap_node *n)
-{
-    if (m->free_key)   m->free_key(n->key);
-    if (m->free_value) m->free_value(n->value);
-    qk_hmap_node_free(n);
-}
 
 QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*))
 {
@@ -60,7 +52,7 @@ QKAPI int qk_hmap_set(qk_hmap *m, void *key, void *value)
     qk_hmap_node *node = m->table[index], *prev = NULL, *next = NULL;
 
     if (node == NULL) {
-        node = qk_hmap_node_create(key, value);
+        node = create_node(key, value);
         if (node == NULL) return QK_ERRNO;
         m->len++;
         m->table[index] = node;
@@ -76,7 +68,7 @@ QKAPI int qk_hmap_set(qk_hmap *m, void *key, void *value)
         }
     }
 
-    node = qk_hmap_node_create(key, value);
+    node = create_node(key, value);
     if (node == NULL) return QK_ERRNO;
 
     m->len++;

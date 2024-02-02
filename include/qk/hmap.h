@@ -73,8 +73,5 @@ RETURN VALUE
 
 QKAPI int qk_hmap_merge(const qk_hmap *src, qk_hmap *dst);
 
-QKAPI qk_hmap_node *qk_hmap_node_create(void *k, void *v);
-QKAPI void qk_hmap_node_free(qk_hmap_node* node);
-
 QKAPI size_t qk_hmap_hash_str(const void* s);
 QKAPI int qk_hmap_cmp_str(const void *a, const void *b);
