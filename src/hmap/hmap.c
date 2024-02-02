@@ -14,6 +14,7 @@ static void free_node(qk_hmap *m, qk_hmap_node *n)
 
 QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*))
 {
+    if (cap == 0 || cmp == NULL || hash == NULL) return NULL;
     qk_hmap *m = QK_MALLOC(sizeof(qk_hmap));
     if (m == NULL) return m;
     if (qk_hmap_init(m, cap, hash, cmp) != QK_OK) {
@@ -26,6 +27,7 @@ QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp
 
 QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*))
 {
+    if (cap == 0 || cmp == NULL || hash == NULL) return QK_ERR_INVALID;
     qk_hmap_node **t = QK_MALLOC(sizeof(qk_hmap_node*) * cap);
     if (t == NULL) return QK_ERRNO;
     bzero(t, sizeof(qk_hmap_node*) * cap);
