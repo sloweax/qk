@@ -24,6 +24,9 @@ void test_int()
     ASSERT(qk_safe_add_ull(0, ULLONG_MAX, &u) == QK_OK && u == ULLONG_MAX);
     ASSERT(qk_safe_add_ull(1, ULLONG_MAX, &u) == QK_ERR_OVERFLOW && u == ULLONG_MAX);
 
+    ASSERT(qk_safe_mul_ul(ULONG_MAX, 1, NULL) == QK_OK);
+    ASSERT(qk_safe_mul_ul(ULONG_MAX, 2, NULL) == QK_ERR_OVERFLOW);
+
     ASSERT(qk_safe_mul_ll(LLONG_MAX, 0, &i) == QK_OK && i == 0);
     ASSERT(qk_safe_mul_ll(LLONG_MIN, 0, &i) == QK_OK && i == 0);
     ASSERT(qk_safe_mul_ll(LLONG_MAX, 1, &i) == QK_OK && i == LLONG_MAX);

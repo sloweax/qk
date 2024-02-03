@@ -75,7 +75,7 @@ QKAPI int FNAME(T a, T b, T *r)         \
     return QK_OK;                       \
 }
 
-#if ULONG_MAX > UINT_MAX * UINT_MAX
+#if ULONG_MAX > UINT_MAX
 SAFE_MUL_XSB(int, qk_safe_mul_i, INT_MAX, INT_MIN, long int)
 SAFE_MUL_XUB(unsigned int, qk_safe_mul_ui, UINT_MAX, long unsigned int)
 #else
@@ -83,9 +83,9 @@ SAFE_MUL_XS(int, qk_safe_mul_i, INT_MAX, INT_MIN)
 SAFE_MUL_XU(unsigned int, qk_safe_mul_ui, UINT_MAX)
 #endif
 
-#if ULLONG_MAX > ULONG_MAX * ULONG_MAX
-SAFE_MUL_XSB(long, qk_safe_mul_l, LONG_MAX, LONG_MIN, long long)
-SAFE_MUL_XUB(unsigned long, qk_safe_mul_ul, ULONG_MAX,  unsigned long long)
+#if ULLONG_MAX > ULONG_MAX
+SAFE_MUL_XS(long, qk_safe_mul_l, LONG_MAX, LONG_MIN)
+SAFE_MUL_XUB(unsigned long, qk_safe_mul_ul, ULONG_MAX, unsigned long long)
 #else
 SAFE_MUL_XS(long, qk_safe_mul_l, LONG_MAX, LONG_MIN)
 SAFE_MUL_XU(unsigned long, qk_safe_mul_ul, ULONG_MAX)
@@ -94,7 +94,7 @@ SAFE_MUL_XU(unsigned long, qk_safe_mul_ul, ULONG_MAX)
 SAFE_MUL_XS(long long, qk_safe_mul_ll, LLONG_MAX, LLONG_MIN)
 SAFE_MUL_XU(unsigned long long, qk_safe_mul_ull, ULLONG_MAX)
 
-#if UINT_MAX > USHRT_MAX * USHRT_MAX
+#if UINT_MAX > USHRT_MAX
 SAFE_MUL_XSB(short, qk_safe_mul_s, SHRT_MAX, SHRT_MIN, int)
 SAFE_MUL_XUB(unsigned short, qk_safe_mul_us, USHRT_MAX, unsigned int)
 

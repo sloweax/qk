@@ -55,7 +55,7 @@ QKAPI int FNAME(T a, T b, T *r)         \
     return QK_OK;                       \
 }
 
-#if ULONG_MAX > UINT_MAX + UINT_MAX
+#if ULONG_MAX > UINT_MAX
 SAFE_ADD_XSB(int, qk_safe_add_i, INT_MAX, INT_MIN, long)
 SAFE_ADD_XUB(unsigned int, qk_safe_add_ui, UINT_MAX, unsigned long)
 #else
@@ -77,7 +77,7 @@ SAFE_ADD_XS(char, qk_safe_add_c, CHAR_MAX, CHAR_MIN)
 SAFE_ADD_XU(unsigned char, qk_safe_add_uc, UCHAR_MAX)
 #endif
 
-#if ULLONG_MAX > ULONG_MAX + ULONG_MAX
+#if ULLONG_MAX > ULONG_MAX
 SAFE_ADD_XSB(long, qk_safe_add_l, LONG_MAX, LONG_MIN, long long)
 SAFE_ADD_XUB(unsigned long, qk_safe_add_ul, ULONG_MAX, unsigned long long)
 #else
