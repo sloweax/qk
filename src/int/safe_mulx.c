@@ -77,10 +77,10 @@ QKAPI int FNAME(T a, T b, T *r)         \
 
 #if ULONG_MAX > UINT_MAX
 SAFE_MUL_XSB(int, qk_safe_mul_i, INT_MAX, INT_MIN, long int)
-SAFE_MUL_XUB(unsigned int, qk_safe_mul_ui, UINT_MAX, long unsigned int)
+SAFE_MUL_XUB(unsigned int, qk_safe_mul_u, UINT_MAX, long unsigned int)
 #else
 SAFE_MUL_XS(int, qk_safe_mul_i, INT_MAX, INT_MIN)
-SAFE_MUL_XU(unsigned int, qk_safe_mul_ui, UINT_MAX)
+SAFE_MUL_XU(unsigned int, qk_safe_mul_u, UINT_MAX)
 #endif
 
 #if ULLONG_MAX > ULONG_MAX
