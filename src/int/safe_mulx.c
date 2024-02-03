@@ -84,7 +84,7 @@ SAFE_MUL_XU(unsigned int, qk_safe_mul_ui, UINT_MAX)
 #endif
 
 #if ULLONG_MAX > ULONG_MAX
-SAFE_MUL_XS(long, qk_safe_mul_l, LONG_MAX, LONG_MIN)
+SAFE_MUL_XSB(long, qk_safe_mul_l, LONG_MAX, LONG_MIN, long long)
 SAFE_MUL_XUB(unsigned long, qk_safe_mul_ul, ULONG_MAX, unsigned long long)
 #else
 SAFE_MUL_XS(long, qk_safe_mul_l, LONG_MAX, LONG_MIN)
