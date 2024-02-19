@@ -23,12 +23,12 @@ QKAPI int FNAME(T a, T b, T *r)         \
     if (a < MIN / b) {                  \
 underflow:                              \
         if (r) *r = MIN;                \
-        return QK_ERR_UNDERFLOW;        \
+        return QK_UNDERFLOW;        \
     }                                   \
     if (a > MAX / b) {                  \
 overflow:                               \
         if (r) *r = MAX;                \
-        return QK_ERR_OVERFLOW;         \
+        return QK_OVERFLOW;         \
     }                                   \
 exit:                                   \
     if (r) *r = a * b;                  \
@@ -41,11 +41,11 @@ QKAPI int FNAME(T a, T b, T *r)              \
     BT tmp = (BT)a*(BT)b;                    \
     if (tmp > MAX) {                         \
         if (r) *r = MAX;                     \
-        return QK_ERR_OVERFLOW;              \
+        return QK_OVERFLOW;              \
     }                                        \
     if (tmp < MIN) {                         \
         if (r) *r = MIN;                     \
-        return QK_ERR_UNDERFLOW;             \
+        return QK_UNDERFLOW;             \
     }                                        \
     if (r) *r = (T)tmp;                      \
     return QK_OK;                            \
@@ -56,7 +56,7 @@ QKAPI int FNAME(T a, T b, T *r)    \
 {                                  \
     if (b && a > MAX / b) {        \
         if (r) *r = MAX;           \
-        return QK_ERR_OVERFLOW;    \
+        return QK_OVERFLOW;    \
     }                              \
                                    \
     if (r) *r = a * b;             \
@@ -69,7 +69,7 @@ QKAPI int FNAME(T a, T b, T *r)         \
     BT tmp = (BT)a*(BT)b;               \
     if (tmp > MAX) {                    \
         if (r) *r = MAX;                \
-        return QK_ERR_OVERFLOW;         \
+        return QK_OVERFLOW;         \
     }                                   \
     if (r) *r = (T)tmp;                 \
     return QK_OK;                       \

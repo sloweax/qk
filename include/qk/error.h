@@ -2,11 +2,11 @@
 
 #include "../qk.h"
 
-#define QK_OK            0
-#define QK_ERRNO         1
-#define QK_ERR_INVALID   2
-#define QK_ERR_OVERFLOW  3
-#define QK_ERR_UNDERFLOW 4
+#define QK_OK        0
+#define QK_ERRNO     1
+#define QK_INVALID   2
+#define QK_OVERFLOW  3
+#define QK_UNDERFLOW 4
 
 /*
 DESCRIPTION

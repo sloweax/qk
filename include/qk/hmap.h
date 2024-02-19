@@ -31,7 +31,7 @@ DESCRIPTION
     is set. it will also free its keys / values
 
 RETURN VALUE
-    `qk_hmap_init` returns `QK_OK` on success. `QK_ERR_INVALID` or `QK_ERRNO`
+    `qk_hmap_init` returns `QK_OK` on success. `QK_INVALID` or `QK_ERRNO`
     on error
 
     `qk_hmap_create` returns `NULL` on error

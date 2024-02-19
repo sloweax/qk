@@ -12,7 +12,7 @@ DESCRIPTION
 
 RETURN VALUE
     returns `QK_OK` on success. If the result is not able to fit the type, the
-    function will return `QK_ERR_OVERFLOW` / `QK_ERR_UNDERFLOW` (if signed)
+    function will return `QK_OVERFLOW` / `QK_UNDERFLOW` (if signed)
 */
 
 QKAPI int qk_safe_add_i(int a, int b, int *r);

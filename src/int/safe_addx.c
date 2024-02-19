@@ -6,11 +6,11 @@ QKAPI int FNAME(T a, T b, T *r)         \
 {                                       \
     if ((a > 0) && (b > MAX - a)) {     \
         if (r) *r = MAX;                \
-        return QK_ERR_OVERFLOW;         \
+        return QK_OVERFLOW;         \
     }                                   \
     if ((a < 0) && (b < MIN - a)) {     \
         if (r) *r = MIN;                \
-        return QK_ERR_UNDERFLOW;        \
+        return QK_UNDERFLOW;        \
     }                                   \
     if (r) *r = a + b;                  \
     return QK_OK;                       \
@@ -22,11 +22,11 @@ QKAPI int FNAME(T a, T b, T *r)              \
     BT tmp = (BT)a+(BT)b;                    \
     if (tmp > MAX) {                         \
         if (r) *r = MAX;                     \
-        return QK_ERR_OVERFLOW;              \
+        return QK_OVERFLOW;              \
     }                                        \
     if (tmp < MIN) {                         \
         if (r) *r = MIN;                     \
-        return QK_ERR_UNDERFLOW;             \
+        return QK_UNDERFLOW;             \
     }                                        \
     if (r) *r = (T)tmp;                      \
     return QK_OK;                            \
@@ -37,7 +37,7 @@ QKAPI int FNAME(T a, T b, T *r)     \
 {                                   \
     if ((a > 0) && (b > MAX - a)) { \
         if (r) *r = MAX;            \
-        return QK_ERR_OVERFLOW;     \
+        return QK_OVERFLOW;     \
     }                               \
     if (r) *r = a + b;              \
     return QK_OK;                   \
@@ -49,7 +49,7 @@ QKAPI int FNAME(T a, T b, T *r)         \
     BT tmp = (BT)a+(BT)b;               \
     if (tmp > MAX) {                    \
         if (r) *r = MAX;                \
-        return QK_ERR_OVERFLOW;         \
+        return QK_OVERFLOW;         \
     }                                   \
     if (r) *r = (T)tmp;                 \
     return QK_OK;                       \
