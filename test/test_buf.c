@@ -40,4 +40,16 @@ void test_buf()
     ASSERT(memcmp("123abc", sbuf.data, 6) == 0 && sbuf.len == 6 && sbuf.cap == 10);
 
     qk_buf_free(&sbuf);
+
+    qk_buf dbuf;
+    qk_buf_init(&dbuf);
+    dbuf.flags |= QK_BUF_DOUBLE_CAPACITY;
+    assert(qk_buf_grow(&dbuf, 8) == QK_OK);
+    ASSERT(dbuf.cap == 8);
+    assert(qk_buf_set(&dbuf, "1234567890", 10) == QK_OK);
+    ASSERT(dbuf.cap == 16);
+    assert(qk_buf_cat(&dbuf, "1234567890", 10) == QK_OK);
+    ASSERT(dbuf.cap == 32);
+
+    qk_buf_free(&dbuf);
 }

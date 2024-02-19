@@ -3,8 +3,10 @@
 #include "error.h"
 #include <stddef.h>
 
-#define QK_BUF_STRUCT_ALLOC (1 << 0)
-#define QK_BUF_DATA_ALLOC   (1 << 1)
+#define QK_BUF_STRUCT_ALLOC    (1 << 0)
+#define QK_BUF_DATA_ALLOC      (1 << 1)
+// if qk_buf_reserve needs to realloc, double its capacity
+#define QK_BUF_DOUBLE_CAPACITY (1 << 2)
 
 typedef struct {
     int flags;

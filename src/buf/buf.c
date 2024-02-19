@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX(A, B) (A) > (B) ? (A) : (B)
+
 QKAPI void qk_buf_init(qk_buf *b)
 {
     b->flags = QK_BUF_DATA_ALLOC;
@@ -46,6 +48,9 @@ QKAPI int qk_buf_reserve(qk_buf *b, size_t cap)
 {
     if (cap <= b->cap)
         return QK_OK;
+
+    if (b->flags & QK_BUF_DOUBLE_CAPACITY)
+        cap = MAX(b->cap * 2, cap);
 
     return qk_buf_grow(b, cap - b->cap);
 }
