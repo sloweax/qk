@@ -62,3 +62,14 @@ RETURN VALUE
 
 QKAPI int qk_buf_set(qk_buf *b, void *data, size_t len);
 QKAPI int qk_buf_cat(qk_buf *b, void *data, size_t len);
+
+/*
+DESCRIPTION
+    `qk_buf_read` concatenates the content of fd into the dynamic bytearray `b`
+
+RETURN VALUE
+    `qk_buf_read` return QK_OK on success, QK_INVALID if `b` is static and
+    not able to fit `data`, QK_ERRNO on error
+*/
+
+QKAPI int qk_buf_read(qk_buf *b, int fd);

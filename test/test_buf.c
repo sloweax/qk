@@ -1,7 +1,9 @@
 #include "../include/qk/buf.h"
 #include "unit.h"
 #include <assert.h>
+#include <fcntl.h>
 #include <string.h>
+#include <unistd.h>
 
 void test_buf()
 {
@@ -52,6 +54,14 @@ void test_buf()
     ASSERT(dbuf.cap == 32);
     assert(qk_buf_cat(&dbuf, "1234567890", 10) == QK_OK);
     ASSERT(dbuf.cap == 32);
+
+    qk_buf_clear(&dbuf);
+
+    int fd = open("file.txt", O_RDONLY);
+    assert(fd != -1);
+    assert(qk_buf_read(&dbuf, fd) == QK_OK);
+    ASSERT(dbuf.cap == 32 && dbuf.len == 5 && memcmp(dbuf.data, "file\n", 5) == 0);
+    close(fd);
 
     qk_buf_free(&dbuf);
 }

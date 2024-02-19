@@ -1,6 +1,7 @@
 #include "../../include/qk/buf.h"
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define MAX(A, B) (A) > (B) ? (A) : (B)
 
@@ -98,5 +99,20 @@ QKAPI int qk_buf_cat(qk_buf *b, void *data, size_t len)
     if (r != QK_OK) return r;
     memcpy(b->data+b->len, data, len);
     b->len += len;
+    return QK_OK;
+}
+
+QKAPI int qk_buf_read(qk_buf *b, int fd)
+{
+    char buf[4096];
+    ssize_t rd;
+    int r;
+
+    while ((rd = read(fd, buf, sizeof(buf)))) {
+        if (rd == -1) return QK_ERRNO;
+        r = qk_buf_cat(b, buf, rd);
+        if (r != QK_OK) return r;
+    }
+
     return QK_OK;
 }
