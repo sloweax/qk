@@ -50,6 +50,8 @@ void test_buf()
     ASSERT(dbuf.cap == 16);
     assert(qk_buf_cat(&dbuf, "1234567890", 10) == QK_OK);
     ASSERT(dbuf.cap == 32);
+    assert(qk_buf_cat(&dbuf, "1234567890", 10) == QK_OK);
+    ASSERT(dbuf.cap == 32);
 
     qk_buf_free(&dbuf);
 }
