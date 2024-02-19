@@ -6,6 +6,9 @@
 #ifndef QK_FREE
 #define QK_FREE(p)    free(p)
 #endif
+#ifndef QK_REALLOC
+#define QK_REALLOC(p, sz)    realloc(p, sz)
+#endif
 
 #ifndef QKAPI
 #define QKAPI extern
