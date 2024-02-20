@@ -40,7 +40,7 @@ DESCRIPTION
     its length is 0. it will free the data
 
 RETURN VALUE
-    `qk_buf_{grow,reserve,fit}` return QK_OK on success, QK_INVALID if the
+    `qk_buf_{grow,reserve,fit}` returns QK_OK on success, QK_INVALID if the
     dynamic buffer is static (`qk_buf_reserve` only returns QK_INVALID if `cap`
     is not able to fit its capacity), QK_ERRNO on error
 */
@@ -56,7 +56,7 @@ DESCRIPTION
     `qk_buf_cat` concatenates the dynamic buffer `b` data with `data`
 
 RETURN VALUE
-    `qk_buf_{cat,set}` return QK_OK on success, QK_INVALID if `b` is static and
+    `qk_buf_{cat,set}` returns QK_OK on success, QK_INVALID if `b` is static and
     not able to fit `data`, QK_ERRNO on error
 */
 
@@ -65,11 +65,14 @@ QKAPI int qk_buf_cat(qk_buf *b, void *data, size_t len);
 
 /*
 DESCRIPTION
-    `qk_buf_read` concatenates the content of fd into the dynamic bytearray `b`
+    `qk_buf_read` concatenates the content of `fd` into the dynamic bytearray `b`
+    `qk_buf_read_path` concatenates the content of the file at `path` into the
+    dynamic bytearray `b`
 
 RETURN VALUE
-    `qk_buf_read` return QK_OK on success, QK_INVALID if `b` is static and
-    not able to fit `data`, QK_ERRNO on error
+    `qk_buf_{read,read_path}` returns QK_OK on success, QK_INVALID if `b` is
+    static and not able to fit `data`, QK_ERRNO on error
 */
 
 QKAPI int qk_buf_read(qk_buf *b, int fd);
+QKAPI int qk_buf_read_path(qk_buf *b, const char *path);

@@ -1,4 +1,5 @@
 #include "../../include/qk/buf.h"
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -115,4 +116,13 @@ QKAPI int qk_buf_read(qk_buf *b, int fd)
     }
 
     return QK_OK;
+}
+
+QKAPI int qk_buf_read_path(qk_buf *b, const char *path)
+{
+    int fd = open(path, O_RDONLY);
+    if (fd == -1) return QK_ERRNO;
+    int r = qk_buf_read(b, fd);
+    if (close(fd) != 0) return r == QK_OK ? QK_ERRNO : r;
+    return r;
 }
