@@ -19,15 +19,17 @@ DESCRIPTION
     `qk_buf_init` initializes the dynamic buffer `b`
     `qk_buf_create` creates an dynamic buffer
     `qk_buf_free` free's the dynamic buffer
+    `qk_buf_dup` creates a `qk_buf_fit'ed` duplicate of `b`
     `QK_BUF_STATIC_CREATE` creates a static buffer with the specified capacity
 
 RETURN VALUE
-    `qk_buf_create` returns `NULL` on error
+    `qk_buf_{create,dup}` returns `NULL` on error
 */
 
 QKAPI void qk_buf_init(qk_buf *b);
 QKAPI qk_buf *qk_buf_create();
 QKAPI void qk_buf_free(qk_buf *b);
+QKAPI qk_buf *qk_buf_dup(const qk_buf *b);
 #define QK_BUF_STATIC_CREATE(CAP) {.flags = 0, .len = 0, .cap = (CAP), .data = (unsigned char[(CAP)]){0}}
 
 /*

@@ -126,3 +126,15 @@ QKAPI int qk_buf_read_path(qk_buf *b, const char *path)
     if (close(fd) != 0) return r == QK_OK ? QK_ERRNO : r;
     return r;
 }
+
+QKAPI qk_buf *qk_buf_dup(const qk_buf *b)
+{
+    qk_buf *r = qk_buf_create();
+    if (r == NULL) return NULL;
+    r->flags = b->flags | QK_BUF_STRUCT_ALLOC | QK_BUF_DATA_ALLOC;
+    if (qk_buf_set(r, b->data, b->len) != QK_OK) {
+        qk_buf_free(r);
+        return NULL;
+    }
+    return r;
+}
