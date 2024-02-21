@@ -28,7 +28,7 @@ RETURN VALUE
 */
 
 QKAPI void qk_buf_init(qk_buf *b);
-QKAPI qk_buf *qk_buf_create();
+QKAPI qk_buf *qk_buf_create(void);
 QKAPI void qk_buf_free(qk_buf *b);
 QKAPI qk_buf *qk_buf_dup(const qk_buf *b);
 #define QK_BUF_STATIC_CREATE(CAP) {.flags = 0, .len = 0, .cap = (CAP), .data = (unsigned char[(CAP)]){0}}

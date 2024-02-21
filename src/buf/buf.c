@@ -13,7 +13,7 @@ QKAPI void qk_buf_init(qk_buf *b)
     b->data = NULL;
 }
 
-QKAPI qk_buf *qk_buf_create()
+QKAPI qk_buf *qk_buf_create(void)
 {
     qk_buf *b = QK_MALLOC(sizeof(qk_buf));
     if (b == NULL) return b;
