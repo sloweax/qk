@@ -3,7 +3,7 @@
 #include "error.h"
 #include <stddef.h>
 
-#define QK_HMAP_FLAG_STRUCT_ALLOC (1 << 0)
+#define QK_HMAP_STRUCT_ALLOC (1 << 0)
 
 typedef struct qk_hmap_node {
     void *key, *value;

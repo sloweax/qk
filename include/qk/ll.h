@@ -3,7 +3,7 @@
 #include "error.h"
 #include <stddef.h>
 
-#define QK_LL_FLAG_STRUCT_ALLOC (1 << 0)
+#define QK_LL_STRUCT_ALLOC (1 << 0)
 
 #define QK_LL_FOREACH(LL, NODE) \
     for ((NODE) = (LL)->head;   \

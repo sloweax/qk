@@ -13,7 +13,7 @@ QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp
         QK_FREE(m);
         return NULL;
     }
-    m->flags |= QK_HMAP_FLAG_STRUCT_ALLOC;
+    m->flags |= QK_HMAP_STRUCT_ALLOC;
     return m;
 }
 
@@ -42,7 +42,7 @@ QKAPI void qk_hmap_free(qk_hmap *m)
     }
 
     QK_FREE(m->table);
-    if (m->flags & QK_HMAP_FLAG_STRUCT_ALLOC)
+    if (m->flags & QK_HMAP_STRUCT_ALLOC)
         QK_FREE(m);
 }
 
