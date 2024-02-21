@@ -18,9 +18,13 @@ typedef struct {
 /*
 DESCRIPTION
     `qk_buf_init` initializes the dynamic buffer `b`
+
     `qk_buf_create` creates an dynamic buffer
+
     `qk_buf_free` free's the dynamic buffer
+
     `qk_buf_dup` creates a `qk_buf_fit'ed` duplicate of `b`
+
     `QK_BUF_STATIC_CREATE` creates a static buffer with the specified capacity
 
 RETURN VALUE
@@ -36,9 +40,12 @@ QKAPI qk_buf *qk_buf_dup(const qk_buf *b);
 /*
 DESCRIPTION
     `qk_buf_grow` increases the capacity of the dynamic buffer `b` by `cap`
+
     `qk_buf_reserve` increases the capacity of the dynamic buffer `b` by `cap`
     if needed
+
     `qk_buf_clear` clears the dynamic buffer without changing the capacity
+
     `qk_buf_fit` makes the dynamic buffer capacity fit exactly its length. if
     its length is 0. it will free the data
 
@@ -56,6 +63,7 @@ QKAPI int qk_buf_fit(qk_buf *b);
 /*
 DESCRIPTION
     `qk_buf_set` sets the dynamic buffer `b` data
+
     `qk_buf_cat` concatenates the dynamic buffer `b` data with `data`
 
 RETURN VALUE
@@ -69,6 +77,7 @@ QKAPI int qk_buf_cat(qk_buf *b, void *data, size_t len);
 /*
 DESCRIPTION
     `qk_buf_read` concatenates the content of `fd` into the dynamic bytearray `b`
+
     `qk_buf_read_path` concatenates the content of the file at `path` into the
     dynamic bytearray `b`
 
