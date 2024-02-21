@@ -71,8 +71,8 @@ RETURN VALUE
     not able to fit `data`, QK_ERRNO on error
 */
 
-QKAPI int qk_buf_set(qk_buf *b, void *data, size_t len);
-QKAPI int qk_buf_cat(qk_buf *b, void *data, size_t len);
+QKAPI int qk_buf_set(qk_buf *b, const void *data, size_t len);
+QKAPI int qk_buf_cat(qk_buf *b, const void *data, size_t len);
 
 /*
 DESCRIPTION

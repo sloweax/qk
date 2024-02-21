@@ -57,7 +57,7 @@ QKAPI int qk_buf_reserve(qk_buf *b, size_t cap)
     return qk_buf_grow(b, cap - b->cap);
 }
 
-QKAPI int qk_buf_set(qk_buf *b, void *data, size_t len)
+QKAPI int qk_buf_set(qk_buf *b, const void *data, size_t len)
 {
     int r = qk_buf_reserve(b, len);
     if (r != QK_OK) return r;
@@ -94,7 +94,7 @@ QKAPI int qk_buf_fit(qk_buf *b)
     return QK_OK;
 }
 
-QKAPI int qk_buf_cat(qk_buf *b, void *data, size_t len)
+QKAPI int qk_buf_cat(qk_buf *b, const void *data, size_t len)
 {
     int r = qk_buf_reserve(b, b->len + len);
     if (r != QK_OK) return r;
