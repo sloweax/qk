@@ -131,7 +131,7 @@ QKAPI qk_buf *qk_buf_dup(const qk_buf *b)
 {
     qk_buf *r = qk_buf_create();
     if (r == NULL) return NULL;
-    r->flags = b->flags | QK_BUF_STRUCT_ALLOC | QK_BUF_DATA_ALLOC;
+    r->flags = b->flags | QK_BUF_ALL_ALLOC;
     if (qk_buf_set(r, b->data, b->len) != QK_OK) {
         qk_buf_free(r);
         return NULL;
