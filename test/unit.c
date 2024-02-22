@@ -1,4 +1,5 @@
 #include "unit.h"
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -10,8 +11,7 @@ char *last_fname = "";
 int fail_count;
 int ok_count;
 
-int test(int status, const char *funcname, const char *fname,
-	  const char *assertion, int line)
+int test(int status, const char *funcname, const char *fname, const char *assertion, int line, char need_exit)
 {
 	if (strcmp(funcname, last_fname) != 0) {
 		last_fname = (char *)funcname;
@@ -27,6 +27,9 @@ int test(int status, const char *funcname, const char *fname,
 		fail_count++;
 		printf(RED "FAILED" END " %s:%d\n", fname, line);
 	}
+
+	if (status && need_exit)
+		exit(1);
 
 	return status;
 }

@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "unit.h"
 #include "test_hmap.h"
 #include "test_int.h"
@@ -6,10 +7,10 @@
 
 int main()
 {
+    atexit(result);
     test_hmap();
     test_int();
     test_ll();
     test_buf();
     test_buf_str();
-    result();
 }
