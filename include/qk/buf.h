@@ -18,6 +18,9 @@ typedef struct {
 
 /*
 DESCRIPTION
+    `qk_buf_s*` is intended to be used with c strings. the dynamic buffer `b`
+    will be null terminated
+
     `qk_buf_init` initializes the dynamic buffer `b`
 
     `qk_buf_create` creates an dynamic buffer
@@ -29,17 +32,21 @@ DESCRIPTION
     `QK_BUF_STATIC_CREATE` creates a static buffer with the specified capacity
 
 RETURN VALUE
-    `qk_buf_{create,dup}` returns `NULL` on error
+    `qk_buf_*{create,dup}` returns `NULL` on error
 */
 
 QKAPI void qk_buf_init(qk_buf *b);
 QKAPI qk_buf *qk_buf_create(void);
 QKAPI void qk_buf_free(qk_buf *b);
 QKAPI qk_buf *qk_buf_dup(const qk_buf *b);
+QKAPI qk_buf *qk_buf_sdup(const qk_buf *b);
 #define QK_BUF_STATIC_CREATE(CAP) {.flags = 0, .len = 0, .cap = (CAP), .data = (unsigned char[(CAP)]){0}}
 
 /*
 DESCRIPTION
+    `qk_buf_s*` is intended to be used with c strings. the dynamic buffer `b`
+    will be null terminated
+
     `qk_buf_grow` increases the capacity of the dynamic buffer `b` by `cap`
 
     `qk_buf_reserve` increases the capacity of the dynamic buffer `b` by `cap`
@@ -59,7 +66,9 @@ RETURN VALUE
 QKAPI int qk_buf_grow(qk_buf *b, size_t cap);
 QKAPI int qk_buf_reserve(qk_buf *b, size_t cap);
 QKAPI void qk_buf_clear(qk_buf *b);
+QKAPI void qk_buf_sclear(qk_buf *b);
 QKAPI int qk_buf_fit(qk_buf *b);
+QKAPI int qk_buf_sfit(qk_buf *b);
 
 /*
 DESCRIPTION

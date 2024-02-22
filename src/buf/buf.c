@@ -66,8 +66,6 @@ QKAPI int qk_buf_set(qk_buf *b, const void *data, size_t len)
 
 QKAPI void qk_buf_clear(qk_buf *b)
 {
-    if (b->cap)
-        ((char*)b->data)[0] = 0;
     b->len = 0;
 }
 
