@@ -55,6 +55,14 @@ void test_buf()
     assert(qk_buf_cat(&dbuf, "1234567890", 10) == QK_OK);
     ASSERT(dbuf.cap == 32);
 
+    #ifdef _GNU_SOURCE
+    ASSERT(qk_buf_count(&dbuf, "1", 1) == 3);
+    ASSERT(qk_buf_count(&dbuf, "1234567890", 10) == 3);
+    ASSERT(qk_buf_count(&dbuf, "a", 1) == 0);
+    qk_buf_clear(&dbuf);
+    ASSERT(qk_buf_count(&dbuf, "1", 1) == 0);
+    #endif
+
     qk_buf_clear(&dbuf);
 
     int fd = open("file.txt", O_RDONLY);

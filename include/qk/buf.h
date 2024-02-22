@@ -88,3 +88,15 @@ RETURN VALUE
 
 QKAPI int qk_buf_read(qk_buf *b, int fd);
 QKAPI int qk_buf_read_path(qk_buf *b, const char *path);
+
+/*
+DESCRIPTION
+    `qk_buf_count` counts the number of `needle` in the dynamic buffer `b`
+
+RETURN VALUE
+    `qk_buf_count` returns the number of `needle` in the dynamic buffer `b`
+*/
+
+#ifdef _GNU_SOURCE
+QKAPI size_t qk_buf_count(const qk_buf *b, const void *needle, size_t needlelen);
+#endif
