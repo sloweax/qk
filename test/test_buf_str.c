@@ -23,4 +23,12 @@ void test_buf_str()
     qk_buf sstr = QK_BUF_STATIC_CREATE(3);
     ASSERT(qk_buf_sset(&sstr, "ab") == QK_OK && sstr.len == 2 && strcmp(sstr.data, "ab") == 0);
     ASSERT(qk_buf_sset(&sstr, "abc") == QK_INVALID && sstr.len == 2 && strcmp(sstr.data, "ab") == 0);
+
+    qk_buf fstr;
+    qk_buf_init(&fstr);
+    assert(qk_buf_sprintf(&fstr, "%d%s", 123, "abc") == QK_OK);
+    ASSERT(fstr.len == 6 && fstr.cap == 7 && strcmp(fstr.data, "123abc") == 0);
+    assert(qk_buf_sprintf(&fstr, "%s", "xyz") == QK_OK);
+    ASSERT(fstr.len == 9 && fstr.cap == 10 && strcmp(fstr.data, "123abcxyz") == 0);
+    qk_buf_free(&fstr);
 }

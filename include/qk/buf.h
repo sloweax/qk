@@ -2,6 +2,7 @@
 
 #include "error.h"
 #include <stddef.h>
+#include <stdarg.h>
 
 #define QK_BUF_STRUCT_ALLOC    (1 << 0)
 #define QK_BUF_DATA_ALLOC      (1 << 1)
@@ -69,8 +70,10 @@ DESCRIPTION
 
     `qk_buf_cat` concatenates the dynamic buffer `b` data with `data`
 
+    `qk_buf_*printf` concatenates `fmt` to the dynamic buffer `b`
+
 RETURN VALUE
-    `qk_buf_{cat,set}` returns QK_OK on success, QK_INVALID if `b` is static and
+    `qk_buf_*{cat,set,sprintf}` returns QK_OK on success, QK_INVALID if `b` is static and
     not able to fit `data`, QK_ERRNO on error
 */
 
@@ -78,6 +81,8 @@ QKAPI int qk_buf_set(qk_buf *b, const void *data, size_t len);
 QKAPI int qk_buf_sset(qk_buf *b, const char *str);
 QKAPI int qk_buf_cat(qk_buf *b, const void *data, size_t len);
 QKAPI int qk_buf_scat(qk_buf *b, const char *str);
+QKAPI int qk_buf_vsprintf(qk_buf *b, const char *fmt, va_list args);
+QKAPI int qk_buf_sprintf(qk_buf *b, const char *fmt, ...);
 
 /*
 DESCRIPTION
