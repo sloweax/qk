@@ -22,7 +22,7 @@ QKAPI void qk_ll_free(qk_ll *ll)
 {
     qk_ll_node *node, *next;
 
-    QK_LL_FOREACH_SAFE(ll, node, next)
+    QK_LL_FOREACH_SAFEX(ll, node, next)
         free_node(node);
 
     if (ll->flags & QK_LL_STRUCT_ALLOC)
