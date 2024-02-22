@@ -1,7 +1,7 @@
 include ../config.mk
 
 LIBS+=-l:libqk.a
-OBJ+=test.o unit.o test_hmap.o test_int.o test_ll.o test_buf.o
+OBJ+=test.o unit.o test_hmap.o test_int.o test_ll.o test_buf.o test_buf_str.o
 CFLAGS+=-g
 
 all: test

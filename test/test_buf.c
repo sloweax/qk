@@ -46,6 +46,11 @@ void test_buf()
     qk_buf dbuf;
     qk_buf_init(&dbuf);
     dbuf.flags |= QK_BUF_DOUBLE_CAPACITY;
+    #ifdef _GNU_SOURCE
+    ASSERT(qk_buf_replace(&dbuf, "!", 1, "a", 1) == QK_OK);
+    ASSERT(qk_buf_replace(&dbuf, "!@#", 3, "a", 1) == QK_OK);
+    ASSERT(qk_buf_replace(&dbuf, "!", 1, "aaa", 3) == QK_OK);
+    #endif
     assert(qk_buf_grow(&dbuf, 8) == QK_OK);
     ASSERT(dbuf.cap == 8);
     assert(qk_buf_set(&dbuf, "1234567890", 10) == QK_OK);

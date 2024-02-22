@@ -10,5 +10,6 @@ int main()
     test_int();
     test_ll();
     test_buf();
+    test_buf_str();
     result();
 }

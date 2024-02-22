@@ -62,6 +62,9 @@ QKAPI int qk_buf_fit(qk_buf *b);
 
 /*
 DESCRIPTION
+    `qk_buf_s*` is intended to be used with c strings. the dynamic buffer `b`
+    will be null terminated
+
     `qk_buf_set` sets the dynamic buffer `b` data
 
     `qk_buf_cat` concatenates the dynamic buffer `b` data with `data`
@@ -72,7 +75,9 @@ RETURN VALUE
 */
 
 QKAPI int qk_buf_set(qk_buf *b, const void *data, size_t len);
+QKAPI int qk_buf_sset(qk_buf *b, const char *str);
 QKAPI int qk_buf_cat(qk_buf *b, const void *data, size_t len);
+QKAPI int qk_buf_scat(qk_buf *b, const char *str);
 
 /*
 DESCRIPTION
@@ -91,6 +96,9 @@ QKAPI int qk_buf_read_path(qk_buf *b, const char *path);
 
 /*
 DESCRIPTION
+    `qk_buf_s*` is intended to be used with c strings. the dynamic buffer `b`
+    will be null terminated
+
     `qk_buf_count` counts the number of `needle` in the dynamic buffer `b`
 
     `qk_buf_replace` replaces all occurrences of `before` with `after`
@@ -104,5 +112,7 @@ RETURN VALUE
 
 #ifdef _GNU_SOURCE
 QKAPI size_t qk_buf_count(const qk_buf *b, const void *needle, size_t needlelen);
+QKAPI size_t qk_buf_scount(const qk_buf *b, const char *needle);
 QKAPI int qk_buf_replace(qk_buf *b, const void *before, size_t beforelen, const void *after, size_t afterlen);
+QKAPI int qk_buf_sreplace(qk_buf *b, const char *before, const char *after);
 #endif
