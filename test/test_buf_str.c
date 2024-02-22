@@ -30,7 +30,7 @@ void test_buf_str()
     ASSERT(fstr.len == 6 && fstr.cap == 7 && strcmp(fstr.data, "123abc") == 0);
     assert(qk_buf_sprintf(&fstr, "%s", "xyz") == QK_OK);
     ASSERT(fstr.len == 9 && fstr.cap == 10 && strcmp(fstr.data, "123abcxyz") == 0);
-    qk_buf_clear(&fstr);
+    qk_buf_sclear(&fstr);
     ASSERT(fstr.len == 0 && strlen(fstr.data) == 0);
     qk_buf_free(&fstr);
 }
