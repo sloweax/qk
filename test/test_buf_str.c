@@ -8,9 +8,9 @@ void test_buf_str()
     qk_buf str;
     qk_buf_init(&str);
     assert(qk_buf_sset(&str, "hello") == QK_OK);
-    ASSERT(str.cap == 6 && str.len == 5 && strcmp(str.data, "hello") == 0);
+    MUST_ASSERT(str.cap == 6 && str.len == 5 && strcmp(str.data, "hello") == 0);
     assert(qk_buf_scat(&str, " world") == QK_OK);
-    ASSERT(str.cap == 12 && str.len == 11 && strcmp(str.data, "hello world") == 0);
+    MUST_ASSERT(str.cap == 12 && str.len == 11 && strcmp(str.data, "hello world") == 0);
     #ifdef _GNU_SOURCE
     ASSERT(qk_buf_scount(&str, "l") == 3);
     assert(qk_buf_sreplace(&str, "hello ", "") == QK_OK);
@@ -32,5 +32,15 @@ void test_buf_str()
     ASSERT(fstr.len == 9 && fstr.cap == 10 && strcmp(fstr.data, "123abcxyz") == 0);
     qk_buf_sclear(&fstr);
     ASSERT(fstr.len == 0 && strlen(fstr.data) == 0);
+    assert(qk_buf_sset(&fstr, "123abcxyz") == QK_OK);
+    assert(qk_buf_sfit(&fstr) == QK_OK);
+    ASSERT(fstr.cap == 10 && fstr.len == 9);
+    MUST_ASSERT(qk_buf_sset(&fstr, "a") == QK_OK);
+    assert(qk_buf_sfit(&fstr) == QK_OK);
+    ASSERT(fstr.cap == 2 && fstr.len == 1);
+    qk_buf *dupstr = qk_buf_sdup(&fstr);
+    assert(dupstr);
+    ASSERT(dupstr->cap == fstr.cap && fstr.len == dupstr->len && strcmp(fstr.data, dupstr->data) == 0);
+    qk_buf_free(dupstr);
     qk_buf_free(&fstr);
 }
