@@ -14,7 +14,7 @@ QKAPI qk_buf *qk_buf_sdup(const qk_buf *b)
     }
 
     memcpy(r->data, b->data, b->len);
-    ((char*)b->data)[b->len] = 0;
+    ((char*)r->data)[b->len] = 0;
     r->len = b->len;
 
     return r;
