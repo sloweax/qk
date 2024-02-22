@@ -61,7 +61,7 @@ void test_buf()
     ASSERT(qk_buf_count(&dbuf, "a", 1) == 0);
     ASSERT(qk_buf_replace(&dbuf, "12", 0, "ab", 2) == QK_INVALID);
     ASSERT(qk_buf_replace(&dbuf, "12", 2, "ab", 2) == QK_OK);
-    ASSERT(qk_buf_count(&dbuf, "ab", 1) == 3);
+    ASSERT(qk_buf_count(&dbuf, "ab", 2) == 3);
     ASSERT(dbuf.len == 30 && memcmp(dbuf.data, "ab34567890ab34567890ab34567890", 30) == 0);
     ASSERT(qk_buf_replace(&dbuf, "ab", 2, "", 0) == QK_OK);
     ASSERT(dbuf.len == 24 && memcmp(dbuf.data, "345678903456789034567890", 24) == 0);
