@@ -40,7 +40,8 @@ void test_buf_str()
     ASSERT(fstr.cap == 2 && fstr.len == 1);
     qk_buf *dupstr = qk_buf_sdup(&fstr);
     assert(dupstr);
-    ASSERT(dupstr->cap == fstr.cap && fstr.len == dupstr->len && strcmp(fstr.data, dupstr->data) == 0);
+    ASSERT(dupstr->cap == fstr.cap && fstr.len == dupstr->len);
+    ASSERT(strcmp(fstr.data, dupstr->data) == 0 && fstr.data != dupstr->data);
     qk_buf_free(dupstr);
     qk_buf_free(&fstr);
 }
