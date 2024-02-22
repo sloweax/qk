@@ -10,20 +10,20 @@
          (NODE);                \
          (NODE) = (NODE)->next)
 
-#define QK_LL_FOREACHX(LL, NODE, VAR)         \
-    for ((NODE) = (LL)->head;                 \
-         (NODE) && ((VAR) = (NODE)->data, 1); \
-         (NODE) = (NODE)->next)
+#define QK_LL_FOREACHX(LL, VAR)                     \
+    for (qk_ll_node *QKTMPNODE = (LL)->head;        \
+         QKTMPNODE && ((VAR) = QKTMPNODE->data, 1); \
+         QKTMPNODE = QKTMPNODE->next)
 
 #define QK_LL_FOREACH_SAFE(LL, NODE, TMP)     \
     for ((NODE) = (LL)->head;                 \
          (NODE) && ((TMP) = (NODE)->next, 1); \
          (NODE) = (TMP))
 
-#define QK_LL_FOREACH_SAFEX(LL, NODE, TMP, VAR)                            \
-    for ((NODE) = (LL)->head;                                              \
-         (NODE) && ((TMP) = (NODE)->next, 1) && ((VAR) = (NODE)->data, 1); \
-         (NODE) = (TMP))
+#define QK_LL_FOREACH_SAFEX(LL, VAR)                                                       \
+    for (qk_ll_node *QKTMPNODE = (LL)->head, *QKNEXTNODE;                                  \
+         QKTMPNODE && ((QKNEXTNODE) = QKTMPNODE->next, 1) && ((VAR) = QKTMPNODE->data, 1); \
+         QKTMPNODE = (QKNEXTNODE))
 
 typedef struct qk_ll_node {
     void *data;
