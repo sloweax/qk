@@ -6,21 +6,21 @@
 #define QK_LL_STRUCT_ALLOC (1 << 0)
 
 #define QK_LL_FOREACHX(LL, NODE) \
-    for ((NODE) = (LL)->head;   \
-         (NODE);                \
+    for ((NODE) = (LL)->head;    \
+         (NODE);                 \
          (NODE) = (NODE)->next)
 
-#define QK_LL_FOREACH(LL, VAR)                     \
+#define QK_LL_FOREACH(LL, VAR)                      \
     for (qk_ll_node *QKTMPNODE = (LL)->head;        \
          QKTMPNODE && ((VAR) = QKTMPNODE->data, 1); \
          QKTMPNODE = QKTMPNODE->next)
 
 #define QK_LL_FOREACH_SAFEX(LL, NODE, TMP)     \
-    for ((NODE) = (LL)->head;                 \
-         (NODE) && ((TMP) = (NODE)->next, 1); \
+    for ((NODE) = (LL)->head;                  \
+         (NODE) && ((TMP) = (NODE)->next, 1);  \
          (NODE) = (TMP))
 
-#define QK_LL_FOREACH_SAFE(LL, VAR)                                                       \
+#define QK_LL_FOREACH_SAFE(LL, VAR)                                                        \
     for (qk_ll_node *QKTMPNODE = (LL)->head, *QKNEXTNODE;                                  \
          QKTMPNODE && ((QKNEXTNODE) = QKTMPNODE->next, 1) && ((VAR) = QKTMPNODE->data, 1); \
          QKTMPNODE = (QKNEXTNODE))
