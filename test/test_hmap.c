@@ -9,10 +9,11 @@ void test_hmap()
     qk_hmap m;
     qk_hmap_node *n;
 
-    ASSERT(qk_hmap_init(&m, 0, qk_hmap_hash_str, qk_hmap_cmp_str) == QK_INVALID);
-    ASSERT(qk_hmap_init(&m, 2, NULL, NULL) == QK_INVALID);
+    MUST_ASSERT(qk_hmap_init(&m, 0, qk_hmap_hash_str, qk_hmap_cmp_str) == QK_INVALID);
+    MUST_ASSERT(qk_hmap_init(&m, 2, NULL, NULL) == QK_INVALID);
     assert(qk_hmap_init(&m, 2, qk_hmap_hash_str, qk_hmap_cmp_str) == QK_OK);
-    ASSERT(m.len == 0 && m.cap == 2);
+    MUST_ASSERT(m.len == 0 && m.cap == 2);
+    MUST_ASSERT(!(m.flags & QK_HMAP_STRUCT_ALLOC));
     assert(qk_hmap_set(&m, "123", "abc") == QK_OK);
     assert(qk_hmap_set(&m, "a", NULL) == QK_OK);
     assert(qk_hmap_set(&m, "b", NULL) == QK_OK);
