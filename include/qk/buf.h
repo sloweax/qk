@@ -93,10 +93,16 @@ QKAPI int qk_buf_read_path(qk_buf *b, const char *path);
 DESCRIPTION
     `qk_buf_count` counts the number of `needle` in the dynamic buffer `b`
 
+    `qk_buf_replace` replaces all occurrences of `before` with `after`
+
 RETURN VALUE
     `qk_buf_count` returns the number of `needle` in the dynamic buffer `b`
+
+    `qk_buf_replace` return QK_OK on success. QK_INVALID if `b` is static and
+    not able to fit the replaced data or if `beforelen` is 0, QK_ERRNO on error
 */
 
 #ifdef _GNU_SOURCE
 QKAPI size_t qk_buf_count(const qk_buf *b, const void *needle, size_t needlelen);
+QKAPI int qk_buf_replace(qk_buf *b, const void *before, size_t beforelen, const void *after, size_t afterlen);
 #endif

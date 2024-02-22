@@ -53,12 +53,20 @@ void test_buf()
     assert(qk_buf_cat(&dbuf, "1234567890", 10) == QK_OK);
     ASSERT(dbuf.cap == 32);
     assert(qk_buf_cat(&dbuf, "1234567890", 10) == QK_OK);
-    ASSERT(dbuf.cap == 32);
+    ASSERT(dbuf.cap == 32 && dbuf.len == 30);
 
     #ifdef _GNU_SOURCE
     ASSERT(qk_buf_count(&dbuf, "1", 1) == 3);
     ASSERT(qk_buf_count(&dbuf, "1234567890", 10) == 3);
     ASSERT(qk_buf_count(&dbuf, "a", 1) == 0);
+    ASSERT(qk_buf_replace(&dbuf, "12", 0, "ab", 2) == QK_INVALID);
+    ASSERT(qk_buf_replace(&dbuf, "12", 2, "ab", 2) == QK_OK);
+    ASSERT(qk_buf_count(&dbuf, "ab", 1) == 3);
+    ASSERT(dbuf.len == 30 && memcmp(dbuf.data, "ab34567890ab34567890ab34567890", 30) == 0);
+    ASSERT(qk_buf_replace(&dbuf, "ab", 2, "", 0) == QK_OK);
+    ASSERT(dbuf.len == 24 && memcmp(dbuf.data, "345678903456789034567890", 24) == 0);
+    ASSERT(qk_buf_replace(&dbuf, "3", 1, "xy3", 3) == QK_OK);
+    ASSERT(dbuf.len == 30 && memcmp(dbuf.data, "xy34567890xy34567890xy34567890", 30) == 0);
     qk_buf_clear(&dbuf);
     ASSERT(qk_buf_count(&dbuf, "1", 1) == 0);
     #endif
