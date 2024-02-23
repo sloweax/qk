@@ -133,11 +133,11 @@ QKAPI int qk_buf_sreplace(qk_buf *b, const char *before, const char *after);
 
 /*
 DESCRIPTION
-    `qk_buf_ltrim` removes leading whitespaces from `b`
+    `qk_buf_ltrim` removes leading `isspace` from `b`
 
-    `qk_buf_rtrim` removes trailing whitespaces from `b`
+    `qk_buf_rtrim` removes trailing `isspace` from `b`
 
-    `qk_buf_trim` removes leading and trailing whitespaces from `b`
+    `qk_buf_trim` removes leading and trailing `isspace` from `b`
 */
 
 QKAPI void qk_buf_ltrim(qk_buf *b);
