@@ -73,6 +73,8 @@ void test_buf()
     ASSERT(dbuf.len == 24 && memcmp(dbuf.data, "345678903456789034567890", 24) == 0);
     ASSERT(qk_buf_replace(&dbuf, "3", 1, "xy3", 3) == QK_OK);
     ASSERT(dbuf.len == 30 && memcmp(dbuf.data, "xy34567890xy34567890xy34567890", 30) == 0);
+    ASSERT(qk_buf_replace(&dbuf, "x", 1, "a", 1) == QK_OK);
+    ASSERT(dbuf.len == 30 && memcmp(dbuf.data, "ay34567890ay34567890ay34567890", 30) == 0);
     qk_buf_clear(&dbuf);
     ASSERT(qk_buf_count(&dbuf, "1", 1) == 0);
     #endif

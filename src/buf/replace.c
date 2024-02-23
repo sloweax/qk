@@ -3,6 +3,7 @@
 
 #ifdef _GNU_SOURCE
 static void replace_eq(qk_buf *b, const void *before, const void *after, size_t len);
+static void replace_eq_1(qk_buf *b, unsigned char before, unsigned char after);
 static void replace_g(qk_buf *b, const void *before, size_t beforelen, const void *after, size_t afterlen);
 static void replace_l(qk_buf *b, const void *before, size_t beforelen, const void *after, size_t afterlen);
 
@@ -11,7 +12,10 @@ QKAPI int qk_buf_replace(qk_buf *b, const void *before, size_t beforelen, const 
     if (beforelen == 0) return QK_INVALID;
 
     if (beforelen == afterlen) {
-        replace_eq(b, before, after, beforelen);
+        if (beforelen == 1)
+            replace_eq_1(b, *(unsigned char*)before, *(unsigned char*)after);
+        else
+            replace_eq(b, before, after, beforelen);
         return QK_OK;
     }
 
@@ -39,6 +43,13 @@ static void replace_eq(qk_buf *b, const void *before, const void *after, size_t 
         memcpy(tmp, after, len);
         tmp += len;
     }
+}
+
+static void replace_eq_1(qk_buf *b, unsigned char before, unsigned char after)
+{
+    unsigned char *tmp = b->data;
+    while ((tmp = memchr(tmp, before, b->len - (tmp - (unsigned char*)b->data))))
+        *tmp++ = after;
 }
 
 static void replace_g(qk_buf *b, const void *before, size_t beforelen, const void *after, size_t afterlen)
