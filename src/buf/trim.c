@@ -27,6 +27,6 @@ QKAPI void qk_buf_rtrim(qk_buf *b)
 
 QKAPI void qk_buf_trim(qk_buf *b)
 {
-    qk_buf_ltrim(b);
     qk_buf_rtrim(b);
+    qk_buf_ltrim(b);
 }
