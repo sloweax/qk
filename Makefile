@@ -2,7 +2,7 @@ include config.mk
 
 all: libqk.so libqk.a
 
-CFLAGS+=-Os -fdata-sections -ffunction-sections
+CFLAGS+=-O2 -fdata-sections -ffunction-sections
 LIBDESTPATH=/usr/local/lib
 INCDESTPATH=/usr/local/include
 OBJ=$(patsubst %.c,%.o,$(wildcard src/*/*.c))
