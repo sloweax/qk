@@ -37,9 +37,7 @@ QKAPI int qk_buf_replace(qk_buf *b, const void *before, size_t beforelen, const 
 static void replace_eq(qk_buf *b, const void *before, const void *after, size_t len)
 {
     void *tmp = b->data;
-    for (;;) {
-        tmp = memmem(tmp, b->len - (tmp - b->data), before, len);
-        if (tmp == NULL) return;
+    while ((tmp = memmem(tmp, b->len - (tmp - b->data), before, len))) {
         memcpy(tmp, after, len);
         tmp += len;
     }
@@ -56,9 +54,7 @@ static void replace_g(qk_buf *b, const void *before, size_t beforelen, const voi
 {
     size_t difflen = beforelen - afterlen;
     void *tmp = b->data;
-    for (;;) {
-        tmp = memmem(tmp, b->len - (tmp - b->data), before, beforelen);
-        if (tmp == NULL) return;
+    while ((tmp = memmem(tmp, b->len - (tmp - b->data), before, beforelen))) {
         memcpy(tmp, after, afterlen);
         memmove(tmp + afterlen, tmp + beforelen, b->len - (tmp - b->data));
         tmp += afterlen;
@@ -70,9 +66,7 @@ static void replace_l(qk_buf *b, const void *before, size_t beforelen, const voi
 {
     void *tmp = b->data;
     size_t difflen = afterlen - beforelen;
-    for (;;) {
-        tmp = memmem(tmp, b->len - (tmp - b->data), before, beforelen);
-        if (tmp == NULL) return;
+    while ((tmp = memmem(tmp, b->len - (tmp - b->data), before, beforelen))) {
         size_t lenleft = b->len - (tmp - b->data);
         void *shiftpos = tmp + difflen;
         memmove(shiftpos, tmp, lenleft);
