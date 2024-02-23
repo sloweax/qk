@@ -130,3 +130,16 @@ QKAPI size_t qk_buf_scount(const qk_buf *b, const char *needle);
 QKAPI int qk_buf_replace(qk_buf *b, const void *before, size_t beforelen, const void *after, size_t afterlen);
 QKAPI int qk_buf_sreplace(qk_buf *b, const char *before, const char *after);
 #endif
+
+/*
+DESCRIPTION
+    `qk_buf_ltrim` removes leading whitespaces from `b`
+
+    `qk_buf_rtrim` removes trailing whitespaces from `b`
+
+    `qk_buf_trim` removes leading and trailing whitespaces from `b`
+*/
+
+QKAPI void qk_buf_ltrim(qk_buf *b);
+QKAPI void qk_buf_rtrim(qk_buf *b);
+QKAPI void qk_buf_trim(qk_buf *b);

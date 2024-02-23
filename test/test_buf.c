@@ -41,8 +41,24 @@ void test_buf()
     MUST_ASSERT(qk_buf_set(&sbuf, "123", 3) == QK_OK);
     MUST_ASSERT(qk_buf_cat(&sbuf, "abc", 3) == QK_OK);
     MUST_ASSERT(memcmp("123abc", sbuf.data, 6) == 0 && sbuf.len == 6 && sbuf.cap == 10);
-
-    qk_buf_free(&sbuf);
+    qk_buf_set(&sbuf, "abc\t ", 5);
+    qk_buf_ltrim(&sbuf);
+    ASSERT(sbuf.len == 5 && memcmp(sbuf.data, "abc\t ", 5) == 0);
+    qk_buf_set(&sbuf, " \tabc", 5);
+    qk_buf_ltrim(&sbuf);
+    ASSERT(sbuf.len == 3 && memcmp(sbuf.data, "abc", 3) == 0);
+    qk_buf_set(&sbuf, " \tabc", 5);
+    qk_buf_rtrim(&sbuf);
+    ASSERT(sbuf.len == 5 && memcmp(sbuf.data, " \tabc", 5) == 0);
+    qk_buf_set(&sbuf, "abc\t ", 5);
+    qk_buf_rtrim(&sbuf);
+    ASSERT(sbuf.len == 3 && memcmp(sbuf.data, "abc", 3) == 0);
+    qk_buf_set(&sbuf, "abc", 3);
+    qk_buf_trim(&sbuf);
+    ASSERT(sbuf.len == 3 && memcmp(sbuf.data, "abc", 3) == 0);
+    qk_buf_set(&sbuf, " \tabc\t ", 7);
+    qk_buf_trim(&sbuf);
+    ASSERT(sbuf.len == 3 && memcmp(sbuf.data, "abc", 3) == 0);
 
     qk_buf dbuf;
     qk_buf_init(&dbuf);
