@@ -1,6 +1,5 @@
 #include "../../include/qk/buf.h"
 #include <stdlib.h>
-#include <string.h>
 
 QKAPI int qk_buf_sfit(qk_buf *b)
 {
@@ -25,11 +24,4 @@ QKAPI int qk_buf_sfit(qk_buf *b)
     ((char*)b->data)[b->len] = 0;
 
     return QK_OK;
-}
-
-QKAPI void qk_buf_sclear(qk_buf *b)
-{
-    if (b->cap)
-        ((char*)b->data)[0] = 0;
-    b->len = 0;
 }

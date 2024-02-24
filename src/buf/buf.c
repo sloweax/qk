@@ -55,11 +55,6 @@ QKAPI int qk_buf_reserve(qk_buf *b, size_t cap)
     return qk_buf_grow(b, cap - b->cap);
 }
 
-QKAPI void qk_buf_clear(qk_buf *b)
-{
-    b->len = 0;
-}
-
 QKAPI int qk_buf_fit(qk_buf *b)
 {
     if (b->len == b->cap) return QK_OK;
