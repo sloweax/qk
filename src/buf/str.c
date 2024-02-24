@@ -2,24 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-QKAPI qk_buf *qk_buf_sdup(const qk_buf *b)
-{
-    qk_buf *r = qk_buf_create();
-    if (r == NULL) return NULL;
-    r->flags = b->flags | QK_BUF_ALL_ALLOC;
-
-    if (qk_buf_grow(r, b->len+1) != QK_OK) {
-        qk_buf_free(r);
-        return NULL;
-    }
-
-    memcpy(r->data, b->data, b->len);
-    ((char*)r->data)[b->len] = 0;
-    r->len = b->len;
-
-    return r;
-}
-
 QKAPI int qk_buf_sfit(qk_buf *b)
 {
     if (b->len + 1 == b->cap)
