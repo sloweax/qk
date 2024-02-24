@@ -92,15 +92,6 @@ QKAPI int qk_buf_fit(qk_buf *b)
     return QK_OK;
 }
 
-QKAPI int qk_buf_cat(qk_buf *b, const void *data, size_t len)
-{
-    int r = qk_buf_reserve(b, b->len + len);
-    if (r != QK_OK) return r;
-    memcpy(b->data+b->len, data, len);
-    b->len += len;
-    return QK_OK;
-}
-
 QKAPI qk_buf *qk_buf_dup(const qk_buf *b)
 {
     qk_buf *r = qk_buf_create();
