@@ -12,4 +12,10 @@ QKAPI size_t qk_buf_count(const qk_buf *b, const void *needle, size_t needlelen)
     }
     return r;
 }
+
+QKAPI size_t qk_buf_scount(const qk_buf *b, const char *needle)
+{
+    size_t len = strlen(needle);
+    return qk_buf_count(b, needle, len);
+}
 #endif
