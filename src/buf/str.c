@@ -51,13 +51,3 @@ QKAPI void qk_buf_sclear(qk_buf *b)
         ((char*)b->data)[0] = 0;
     b->len = 0;
 }
-
-QKAPI int qk_buf_sset(qk_buf *b, const char *str)
-{
-    size_t len = strlen(str);
-    int r = qk_buf_reserve(b, len+1);
-    if (r != QK_OK) return r;
-    memcpy(b->data, str, len+1);
-    b->len = len;
-    return QK_OK;
-}
