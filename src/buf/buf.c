@@ -112,21 +112,3 @@ QKAPI qk_buf *qk_buf_dup(const qk_buf *b)
     }
     return r;
 }
-
-#ifdef _GNU_SOURCE
-QKAPI size_t qk_buf_count(const qk_buf *b, const void *needle, size_t needlelen)
-{
-    size_t r = 0;
-    void *tmp = b->data;
-    for (;;) {
-        tmp = memmem(tmp, b->len - (tmp - b->data), needle, needlelen);
-        if (tmp) {
-            tmp += needlelen;
-            r++;
-        } else {
-            break;
-        }
-    }
-    return r;
-}
-#endif
