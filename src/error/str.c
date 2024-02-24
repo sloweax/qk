@@ -2,7 +2,7 @@
 #include <string.h>
 #include <errno.h>
 
-QKAPI char *qk_str_error(int e)
+QKAPI char *qk_error_str(int e)
 {
     switch (e) {
     case QK_ERRNO:     return strerror(errno);

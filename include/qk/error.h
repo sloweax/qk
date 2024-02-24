@@ -14,4 +14,4 @@ DESCRIPTION
     it will call `strerror` instead
 */
 
-QKAPI char *qk_str_error(int e);
+QKAPI char *qk_error_str(int e);
