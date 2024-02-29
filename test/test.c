@@ -4,6 +4,7 @@
 #include "test_int.h"
 #include "test_ll.h"
 #include "test_buf.h"
+#include "test_eval.h"
 
 int main()
 {
@@ -13,4 +14,5 @@ int main()
     test_ll();
     test_buf();
     test_buf_str();
+    test_eval();
 }
