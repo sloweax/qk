@@ -151,8 +151,8 @@ static int tokenize(const char *data, eval_type type, token *root)
             if (errno) return QK_ERRNO;
             if (r > INT_MAX || r < INT_MIN) {
                 errno = ERANGE;
+                return QK_ERRNO;
             }
-            if (errno) return QK_ERRNO;
             if (end != &data[pos]) {
                 tok->type = TOK_NUM;
                 tok->len = end - &data[pos];
