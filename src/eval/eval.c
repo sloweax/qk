@@ -142,7 +142,7 @@ static int tokenize(const char *data, eval_type type, token *root)
             }
         }
 
-        int r;
+        long r;
         char *end;
         switch (type) {
         case EVAL_INT:
