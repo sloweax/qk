@@ -35,6 +35,7 @@ static token primary(const char **p, eval_type type);
 static token unary(const char **p, eval_type type);
 static token expr(const char **p, eval_type type);
 static token add(const char **p, eval_type type);
+static token mul(const char **p, eval_type type);
 
 static token get_token(const char **p, eval_type type);
 static void unget_token(token t, const char **p);
