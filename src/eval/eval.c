@@ -126,7 +126,6 @@ static token unary(const char **p, eval_type type)
         case TOK_INVALID:
             return next;
         default:
-            unget_token(next, p);
             return unary(p, type);
         }
         break;
