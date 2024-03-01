@@ -152,12 +152,14 @@ static token primary(const char **p, eval_type type)
         return tok;
     case TOK_LP:
         tmp = expr(p, type);
+        if (tmp.type == TOK_INVALID) return tmp;
         next = get_token(p, type);
         if (next.type != TOK_RP)
             return (token){.type = TOK_INVALID, .len = next.len};
         return tmp;
     default:
-        return (token){.type = TOK_INVALID, .len = tok.len};
+        tok.type = TOK_INVALID;
+        return tok;
     }
 }
 
