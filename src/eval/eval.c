@@ -31,11 +31,21 @@ typedef struct {
 } token;
 
 static int eval(const char *str, eval_type type, void *r);
+
+// primary = number
+//         | "(" expr ")"
 static token primary(const char **p, eval_type type);
+// unary = primary
+//       | ("+"|"-") unary
 static token unary(const char **p, eval_type type);
-static token expr(const char **p, eval_type type);
-static token add(const char **p, eval_type type);
+// mul = unary
+//     | unary ("*"|"/") unary
 static token mul(const char **p, eval_type type);
+// add = mul
+//     | mul ("+"|"-") mul
+static token add(const char **p, eval_type type);
+// expr = add
+static token expr(const char **p, eval_type type);
 
 static token get_token(const char **p, eval_type type);
 static void unget_token(token t, const char **p);
