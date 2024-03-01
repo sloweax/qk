@@ -144,7 +144,6 @@ static token unary(const char **p, eval_type type)
 static token primary(const char **p, eval_type type)
 {
     token tok = get_token(p, type);
-    if (tok.type == TOK_INVALID) return tok;
     token tmp;
     token next;
     switch (tok.type) {
