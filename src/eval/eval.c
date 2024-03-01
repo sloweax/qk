@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 typedef enum {
@@ -44,6 +45,19 @@ static token sub_token(token a, token b);
 static token mul_token(token a, token b);
 static token div_token(token a, token b);
 static token neg_token(token a);
+static bool is_zero_token(token a);
+
+static bool is_zero_token(token a)
+{
+    switch(a.value.type) {
+    case QK_EVAL_RESULT_FLOAT:
+        return a.value.f == 0.0;
+    case QK_EVAL_RESULT_INT:
+        return a.value.i == 0;
+    default:
+        return true;
+    }
+}
 
 static token neg_token(token a)
 {
@@ -93,17 +107,17 @@ static token div_token(token a, token b)
 {
     token r;
     r.type = a.type;
+    if (is_zero_token(b)) return (token){.type = TOK_INVALID};
+
     switch (a.value.type) {
     case QK_EVAL_RESULT_INT:
         switch (b.value.type) {
         case QK_EVAL_RESULT_INT:
             r.value.type = QK_EVAL_RESULT_INT;
-            if (b.value.i == 0) return (token){.type = TOK_INVALID};
             r.value.i = a.value.i / b.value.i;
             break;
         case QK_EVAL_RESULT_FLOAT:
             r.value.type = QK_EVAL_RESULT_FLOAT;
-            if (b.value.f == 0.0) return (token){.type = TOK_INVALID};
             r.value.f = (float)a.value.i / b.value.f;
             break;
         }
@@ -112,11 +126,9 @@ static token div_token(token a, token b)
         r.value.type = QK_EVAL_RESULT_FLOAT;
         switch (b.value.type) {
         case QK_EVAL_RESULT_INT:
-            if (b.value.i == 0) return (token){.type = TOK_INVALID};
             r.value.f = a.value.f / (float)b.value.i;
             break;
         case QK_EVAL_RESULT_FLOAT:
-            if (b.value.f == 0.0) return (token){.type = TOK_INVALID};
             r.value.f = a.value.f / b.value.f;
             break;
         }
