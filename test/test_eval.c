@@ -30,6 +30,8 @@ void test_eval()
     ASSERT(qk_eval_i("--+-1", &i) == QK_OK && i == -1);
 
     ASSERT(qk_eval_f("9999999999999999999999999999999999999999", NULL) == QK_ERRNO && errno == ERANGE);
+    ASSERT(qk_eval_f("1.0/0.0", NULL) == QK_INVALID);
+    ASSERT(qk_eval_f("10", &f) == QK_OK && f == 10.0);
 
     ASSERT_EVAL(qk_eval_i, i, -1);
     ASSERT_EVAL(qk_eval_i, i, +1);
@@ -47,5 +49,4 @@ void test_eval()
     ASSERT_EVAL(qk_eval_f, f, 1.0);
     ASSERT_EVAL(qk_eval_f, f, -1.0);
     ASSERT_EVAL(qk_eval_f, f, (2.+8.)*(1.+1.));
-    ASSERT_EVAL(qk_eval_f, f, 1./0.);
 }
