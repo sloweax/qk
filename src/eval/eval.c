@@ -37,7 +37,7 @@ static token expr(const char **p, eval_type type);
 static token add(const char **p, eval_type type);
 
 static token get_token(const char **p, eval_type type);
-static void unget_token(token *t, const char **p);
+static void unget_token(token t, const char **p);
 
 static token get_token(const char **p, eval_type type)
 {
@@ -93,9 +93,9 @@ static token get_token(const char **p, eval_type type)
     return (token){.len = 1, .type = TOK_INVALID};
 }
 
-static void unget_token(token *t, const char **p)
+static void unget_token(token t, const char **p)
 {
-    (*p) -= t->len;
+    (*p) -= t.len;
 }
 
 static token expr(const char **p, eval_type type)
@@ -125,7 +125,7 @@ static token unary(const char **p, eval_type type)
         case TOK_INVALID:
             return next;
         default:
-            unget_token(&next, p);
+            unget_token(next, p);
             return unary(p, type);
         }
         break;
@@ -136,7 +136,7 @@ static token unary(const char **p, eval_type type)
     default:
         break;
     }
-    unget_token(&left, p);
+    unget_token(left, p);
     return primary(p, type);
 }
 
@@ -201,7 +201,7 @@ static token mul(const char **p, eval_type type)
         case TOK_INVALID:
             return op;
         default:
-            unget_token(&op, p);
+            unget_token(op, p);
             return left;
         }
     }
@@ -245,7 +245,7 @@ static token add(const char **p, eval_type type)
         case TOK_INVALID:
             return op;
         default:
-            unget_token(&op, p);
+            unget_token(op, p);
             return left;
         }
     }
