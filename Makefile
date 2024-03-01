@@ -17,7 +17,7 @@ libqk.a: $(OBJ)
 	$(AR) rcs $@ $^
 
 clean:
-	find . -type f \( -name '*.o' -o -name '*.a' -o -name '*.so' \) -delete
+	rm -f $(OBJ)
 	cd test && $(MAKE) $@
 
 install: all
