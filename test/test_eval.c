@@ -25,6 +25,9 @@ void test_eval()
     ASSERT(qk_eval_i("1*", NULL) == QK_INVALID);
     ASSERT(qk_eval_i("1/*2", NULL) == QK_INVALID);
     ASSERT(qk_eval_i("9999999999999999999999999999999999999999", NULL) == QK_ERRNO && errno == ERANGE);
+    ASSERT(qk_eval_i("--++1", &i) == QK_OK && i == 1);
+    ASSERT(qk_eval_i("----1", &i) == QK_OK && i == 1);
+    ASSERT(qk_eval_i("--+-1", &i) == QK_OK && i == -1);
 
     ASSERT(qk_eval_f("9999999999999999999999999999999999999999", NULL) == QK_ERRNO && errno == ERANGE);
 
