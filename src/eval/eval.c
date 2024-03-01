@@ -105,10 +105,10 @@ static token expr(const char **p, eval_type type)
 
 static token unary(const char **p, eval_type type)
 {
-    token tok = get_token(p, type);
+    token left = get_token(p, type);
     token next;
 
-    switch (tok.type) {
+    switch (left.type) {
     case TOK_MINUS:
         next = unary(p, type);
         switch (next.type) {
@@ -132,11 +132,11 @@ static token unary(const char **p, eval_type type)
     case TOK_PLUS:
         return unary(p, type);
     case TOK_INVALID:
-        return tok;
+        return left;
     default:
         break;
     }
-    unget_token(&tok, p);
+    unget_token(&left, p);
     return primary(p, type);
 }
 
@@ -163,38 +163,38 @@ static token primary(const char **p, eval_type type)
 
 static token mul(const char **p, eval_type type)
 {
-    token tok = unary(p, type);
-    if (tok.type == TOK_INVALID) return tok;
+    token left = unary(p, type);
+    if (left.type == TOK_INVALID) return left;
 
     token op;
-    token tmp;
+    token right;
 
     for (;;) {
         op = get_token(p, type);
         switch (op.type) {
         case TOK_MUL:
-            tmp = unary(p, type);
-            if (tmp.type == TOK_INVALID) return tmp;
+            right = unary(p, type);
+            if (right.type == TOK_INVALID) return right;
             switch (type) {
             case EVAL_INT:
-                tok.i *= tmp.i;
+                left.i *= right.i;
                 break;
             case EVAL_FLOAT:
-                tok.f *= tmp.f;
+                left.f *= right.f;
                 break;
             }
             break;
         case TOK_DIV:
-            tmp = unary(p, type);
-            if (tmp.type == TOK_INVALID) return tmp;
+            right = unary(p, type);
+            if (right.type == TOK_INVALID) return right;
             switch (type) {
             case EVAL_INT:
-                if (tmp.i == 0)
-                    return (token){.type = TOK_INVALID, .len = tmp.len};
-                tok.i /= tmp.i;
+                if (right.i == 0)
+                    return (token){.type = TOK_INVALID, .len = right.len};
+                left.i /= right.i;
                 break;
             case EVAL_FLOAT:
-                tok.f /= tmp.f;
+                left.f /= right.f;
                 break;
             }
             break;
@@ -202,43 +202,43 @@ static token mul(const char **p, eval_type type)
             return op;
         default:
             unget_token(&op, p);
-            return tok;
+            return left;
         }
     }
 }
 
 static token add(const char **p, eval_type type)
 {
-    token tok = mul(p, type);
-    if (tok.type == TOK_INVALID) return tok;
+    token left = mul(p, type);
+    if (left.type == TOK_INVALID) return left;
 
     token op;
-    token tmp;
+    token right;
 
     for (;;) {
         op = get_token(p, type);
         switch (op.type) {
         case TOK_PLUS:
-            tmp = mul(p, type);
-            if (tmp.type == TOK_INVALID) return tmp;
+            right = mul(p, type);
+            if (right.type == TOK_INVALID) return right;
             switch (type) {
             case EVAL_INT:
-                tok.i += tmp.i;
+                left.i += right.i;
                 break;
             case EVAL_FLOAT:
-                tok.f += tmp.f;
+                left.f += right.f;
                 break;
             }
             break;
         case TOK_MINUS:
-            tmp = mul(p, type);
-            if (tmp.type == TOK_INVALID) return tmp;
+            right = mul(p, type);
+            if (right.type == TOK_INVALID) return right;
             switch (type) {
             case EVAL_INT:
-                tok.i -= tmp.i;
+                left.i -= right.i;
                 break;
             case EVAL_FLOAT:
-                tok.f -= tmp.f;
+                left.f -= right.f;
                 break;
             }
             break;
@@ -246,7 +246,7 @@ static token add(const char **p, eval_type type)
             return op;
         default:
             unget_token(&op, p);
-            return tok;
+            return left;
         }
     }
 }
