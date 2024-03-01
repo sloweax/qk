@@ -49,6 +49,84 @@ static token expr(const char **p, eval_type type);
 
 static token get_token(const char **p, eval_type type);
 static void unget_token(token t, const char **p);
+static token add_token(token a, token b, eval_type type);
+static token sub_token(token a, token b, eval_type type);
+static token mul_token(token a, token b, eval_type type);
+static token div_token(token a, token b, eval_type type);
+static token neg_token(token a, eval_type type);
+
+static token neg_token(token a, eval_type type)
+{
+    switch (type) {
+    case EVAL_INT:
+        a.i = -a.i;
+        break;
+    case EVAL_FLOAT:
+        a.f = -a.f;
+        break;
+    }
+    return a;
+}
+
+static token mul_token(token a, token b, eval_type type)
+{
+    token r;
+    switch (type) {
+    case EVAL_INT:
+        r.i = a.i * b.i;
+        break;
+    case EVAL_FLOAT:
+        r.f = a.f * b.f;
+        break;
+    }
+    return r;
+}
+
+static token div_token(token a, token b, eval_type type)
+{
+    token r;
+    r.type = a.type;
+    switch (type) {
+    case EVAL_INT:
+        if (b.i == 0)
+            r.type = TOK_INVALID;
+        else
+            r.i = a.i / b.i;
+        break;
+    case EVAL_FLOAT:
+        r.f = a.f / b.f;
+        break;
+    }
+    return r;
+}
+
+static token add_token(token a, token b, eval_type type)
+{
+    token r;
+    switch (type) {
+    case EVAL_INT:
+        r.i = a.i + b.i;
+        break;
+    case EVAL_FLOAT:
+        r.f = a.f + b.f;
+        break;
+    }
+    return r;
+}
+
+static token sub_token(token a, token b, eval_type type)
+{
+    token r;
+    switch (type) {
+    case EVAL_INT:
+        r.i = a.i - b.i;
+        break;
+    case EVAL_FLOAT:
+        r.f = a.f - b.f;
+        break;
+    }
+    return r;
+}
 
 static token get_token(const char **p, eval_type type)
 {
@@ -124,30 +202,20 @@ static token unary(const char **p, eval_type type)
         next = unary(p, type);
         switch (next.type) {
         case TOK_NUM:
-            switch (type) {
-            case EVAL_INT:
-                next.i = -next.i;
-                return next;
-            case EVAL_FLOAT:
-                next.f = -next.f;
-                return next;
-            }
-            break;
+            return neg_token(next, type);
         case TOK_INVALID:
             return next;
         default:
             return unary(p, type);
         }
-        break;
     case TOK_PLUS:
         return unary(p, type);
     case TOK_INVALID:
         return left;
     default:
-        break;
+        unget_token(left, p);
+        return primary(p, type);
     }
-    unget_token(left, p);
-    return primary(p, type);
 }
 
 static token primary(const char **p, eval_type type)
@@ -171,7 +239,6 @@ static token primary(const char **p, eval_type type)
     }
 }
 
-
 static token mul(const char **p, eval_type type)
 {
     token left = unary(p, type);
@@ -186,28 +253,13 @@ static token mul(const char **p, eval_type type)
         case TOK_MUL:
             right = unary(p, type);
             if (right.type == TOK_INVALID) return right;
-            switch (type) {
-            case EVAL_INT:
-                left.i *= right.i;
-                break;
-            case EVAL_FLOAT:
-                left.f *= right.f;
-                break;
-            }
+            left = mul_token(left, right, type);
             break;
         case TOK_DIV:
             right = unary(p, type);
             if (right.type == TOK_INVALID) return right;
-            switch (type) {
-            case EVAL_INT:
-                if (right.i == 0)
-                    return (token){.type = TOK_INVALID, .len = right.len};
-                left.i /= right.i;
-                break;
-            case EVAL_FLOAT:
-                left.f /= right.f;
-                break;
-            }
+            left = div_token(left, right, type);
+            if (left.type == TOK_INVALID) return left;
             break;
         case TOK_INVALID:
             return op;
@@ -232,26 +284,12 @@ static token add(const char **p, eval_type type)
         case TOK_PLUS:
             right = mul(p, type);
             if (right.type == TOK_INVALID) return right;
-            switch (type) {
-            case EVAL_INT:
-                left.i += right.i;
-                break;
-            case EVAL_FLOAT:
-                left.f += right.f;
-                break;
-            }
+            left = add_token(left, right, type);
             break;
         case TOK_MINUS:
             right = mul(p, type);
             if (right.type == TOK_INVALID) return right;
-            switch (type) {
-            case EVAL_INT:
-                left.i -= right.i;
-                break;
-            case EVAL_FLOAT:
-                left.f -= right.f;
-                break;
-            }
+            left = sub_token(left, right, type);
             break;
         case TOK_INVALID:
             return op;
