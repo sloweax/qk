@@ -17,7 +17,7 @@ libqk.a: $(OBJ)
 	$(AR) rcs $@ $^
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) *.a *.so
 	cd test && $(MAKE) $@
 
 install: all
