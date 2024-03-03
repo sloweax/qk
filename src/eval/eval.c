@@ -2,8 +2,10 @@
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef enum {
     TOK_LP,
@@ -14,21 +16,37 @@ typedef enum {
     TOK_MUL,
     TOK_DIV,
     TOK_INVALID,
+    TOK_IDENTIFIER,
     TOK_END,
 } token_type;
 
+typedef enum {
+    ID_UNKNOWN,
+    ID_COS,
+    ID_SIN,
+    ID_TAN,
+    ID_ACOS,
+    ID_ASIN,
+    ID_ATAN,
+    ID_SQRT,
+} identifier_type;
+
 typedef struct {
     token_type type;
+    identifier_type id;
     int len;
     qk_eval_result value;
 } token;
 
 // primary = number
 //         | "(" expr ")"
+//         | func
 static token primary(const char **p);
 // unary = primary
 //       | ("+"|"-") unary
 static token unary(const char **p);
+// func = identifier "(" unary ")"
+static token func(const char **p);
 // mul = unary
 //     | unary ("*"|"/") unary
 static token mul(const char **p);
@@ -46,6 +64,118 @@ static token mul_token(token a, token b);
 static token div_token(token a, token b);
 static token neg_token(token a);
 static bool is_zero_token(token a);
+static token sqrt_token(token a);
+static token cos_token(token a);
+static token sin_token(token a);
+static token tan_token(token a);
+static token acos_token(token a);
+static token asin_token(token a);
+static token atan_token(token a);
+
+static token sqrt_token(token a)
+{
+    switch (a.value.type) {
+    case QK_EVAL_RESULT_INT:
+        a.value.type = QK_EVAL_RESULT_FLOAT;
+        a.value.f = sqrtf((float)a.value.i);
+        return a;
+    case QK_EVAL_RESULT_FLOAT:
+        a.value.f = sqrtf(a.value.f);
+        return a;
+    default:
+        return a;
+    }
+}
+
+static token atan_token(token a)
+{
+    switch (a.value.type) {
+    case QK_EVAL_RESULT_INT:
+        a.value.type = QK_EVAL_RESULT_FLOAT;
+        a.value.f = atanf((float)a.value.i);
+        return a;
+    case QK_EVAL_RESULT_FLOAT:
+        a.value.f = atanf(a.value.f);
+        return a;
+    default:
+        return a;
+    }
+}
+
+static token tan_token(token a)
+{
+    switch (a.value.type) {
+    case QK_EVAL_RESULT_INT:
+        a.value.type = QK_EVAL_RESULT_FLOAT;
+        a.value.f = tanf((float)a.value.i);
+        return a;
+    case QK_EVAL_RESULT_FLOAT:
+        a.value.f = tanf(a.value.f);
+        return a;
+    default:
+        return a;
+    }
+}
+
+static token sin_token(token a)
+{
+    switch (a.value.type) {
+    case QK_EVAL_RESULT_INT:
+        a.value.type = QK_EVAL_RESULT_FLOAT;
+        a.value.f = sinf((float)a.value.i);
+        return a;
+    case QK_EVAL_RESULT_FLOAT:
+        a.value.f = sinf(a.value.f);
+        return a;
+    default:
+        return a;
+    }
+}
+
+static token asin_token(token a)
+{
+    switch (a.value.type) {
+    case QK_EVAL_RESULT_INT:
+        a.value.type = QK_EVAL_RESULT_FLOAT;
+        a.value.f = asinf((float)a.value.i);
+        return a;
+    case QK_EVAL_RESULT_FLOAT:
+        a.value.f = asinf(a.value.f);
+        return a;
+    default:
+        return a;
+    }
+}
+
+static token cos_token(token a)
+{
+    switch (a.value.type) {
+    case QK_EVAL_RESULT_INT:
+        a.value.type = QK_EVAL_RESULT_FLOAT;
+        a.value.f = cosf((float)a.value.i);
+        return a;
+    case QK_EVAL_RESULT_FLOAT:
+        a.value.f = cosf(a.value.f);
+        return a;
+    default:
+        return a;
+    }
+}
+
+static token acos_token(token a)
+{
+    switch (a.value.type) {
+    case QK_EVAL_RESULT_INT:
+        a.value.type = QK_EVAL_RESULT_FLOAT;
+        a.value.f = acosf((float)a.value.i);
+        return a;
+    case QK_EVAL_RESULT_FLOAT:
+        a.value.f = acosf(a.value.f);
+        return a;
+    default:
+        return a;
+    }
+}
 
 static bool is_zero_token(token a)
 {
@@ -244,6 +374,40 @@ static token get_token(const char **p)
         return tok;
     }
 
+    const char *i = *p;
+
+    while (isalnum(*i)) i++;
+
+    if (i != *p) {
+        tok.len = i - *p;
+        tok.type = TOK_IDENTIFIER;
+        switch (tok.len) {
+        case 4:
+            if (strncmp(*p, "acos", 4) == 0)
+                tok.id = ID_ACOS;
+            else if (strncmp(*p, "atan", 4) == 0)
+                tok.id = ID_ATAN;
+            else if (strncmp(*p, "asin", 4) == 0)
+                tok.id = ID_ASIN;
+            else if (strncmp(*p, "sqrt", 4) == 0)
+                tok.id = ID_SQRT;
+            break;
+        case 3:
+            if (strncmp(*p, "cos", 3) == 0)
+                tok.id = ID_COS;
+            else if (strncmp(*p, "tan", 3) == 0)
+                tok.id = ID_TAN;
+            else if (strncmp(*p, "sin", 3) == 0)
+                tok.id = ID_SIN;
+            break;
+        default:
+            tok.id = ID_UNKNOWN;
+            break;
+        }
+        *p = i;
+        return tok;
+    }
+
     (*p)++;
     return (token){.len = 1, .type = TOK_INVALID};
 }
@@ -284,6 +448,36 @@ static token unary(const char **p)
     }
 }
 
+static token func(const char **p)
+{
+    token identifier = get_token(p);
+    if (identifier.type != TOK_IDENTIFIER) return (token){.type = TOK_INVALID};
+    if (identifier.id == ID_UNKNOWN) return (token){.type = TOK_INVALID};
+    token tmp = get_token(p);
+    if (tmp.type != TOK_LP) return (token){.type = TOK_INVALID};
+    unget_token(tmp, p);
+    token arg = unary(p);
+    if (arg.type == TOK_INVALID) return arg;
+    switch (identifier.id) {
+    case ID_SQRT:
+        return sqrt_token(arg);
+    case ID_COS:
+        return cos_token(arg);
+    case ID_SIN:
+        return sin_token(arg);
+    case ID_TAN:
+        return tan_token(arg);
+    case ID_ACOS:
+        return acos_token(arg);
+    case ID_ASIN:
+        return asin_token(arg);
+    case ID_ATAN:
+        return atan_token(arg);
+    default:
+        return (token){.type = TOK_INVALID};
+    }
+}
+
 static token primary(const char **p)
 {
     token tok = get_token(p);
@@ -297,8 +491,11 @@ static token primary(const char **p)
         if (tmp.type == TOK_INVALID) return tmp;
         next = get_token(p);
         if (next.type != TOK_RP)
-            return (token){.type = TOK_INVALID, .len = next.len};
+            return (token){.type = TOK_INVALID};
         return tmp;
+    case TOK_IDENTIFIER:
+        unget_token(tok, p);
+        return func(p);
     default:
         tok.type = TOK_INVALID;
         return tok;
