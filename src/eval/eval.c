@@ -8,6 +8,7 @@
 #include <string.h>
 
 typedef enum {
+    TOK_COMMA,
     TOK_LP,
     TOK_RP,
     TOK_NUM,
@@ -22,6 +23,7 @@ typedef enum {
 
 typedef enum {
     ID_UNKNOWN,
+    ID_POW,
     ID_COS,
     ID_SIN,
     ID_TAN,
@@ -31,9 +33,12 @@ typedef enum {
     ID_SQRT,
 } identifier_type;
 
+#define MAX_NARGS 2
+
 typedef struct {
     token_type type;
     identifier_type id;
+    int nargs;
     int len;
     qk_eval_result value;
 } token;
@@ -45,7 +50,7 @@ static token primary(const char **p);
 // unary = primary
 //       | ("+"|"-") unary
 static token unary(const char **p);
-// func = identifier "(" unary ")"
+// func = identifier "(" expr [, expr...] ")"
 static token func(const char **p);
 // mul = unary
 //     | unary ("*"|"/") unary
@@ -65,12 +70,39 @@ static token div_token(token a, token b);
 static token neg_token(token a);
 static bool is_zero_token(token a);
 static token sqrt_token(token a);
+static token pow_token(token a, token b);
 static token cos_token(token a);
 static token sin_token(token a);
 static token tan_token(token a);
 static token acos_token(token a);
 static token asin_token(token a);
 static token atan_token(token a);
+
+static token pow_token(token a, token b)
+{
+    float af, bf;
+    token r;
+    switch (a.value.type) {
+    case QK_EVAL_RESULT_INT:
+        af = ((float)a.value.i);
+        break;
+    default:
+        af = a.value.f;
+        break;
+    }
+    switch (b.value.type) {
+    case QK_EVAL_RESULT_INT:
+        bf = ((float)b.value.i);
+        break;
+    default:
+        bf = b.value.f;
+        break;
+    }
+    r.type = a.type;
+    r.value.type = QK_EVAL_RESULT_FLOAT;
+    r.value.f = powf(af, bf);
+    return r;
+}
 
 static token sqrt_token(token a)
 {
@@ -336,6 +368,7 @@ static token get_token(const char **p)
     char c = **p;
 
     switch (c) {
+    case ',': return ((*p)++, (token){.len = 1, .type = TOK_COMMA});
     case '*': return ((*p)++, (token){.len = 1, .type = TOK_MUL});
     case '/': return ((*p)++, (token){.len = 1, .type = TOK_DIV});
     case '(': return ((*p)++, (token){.len = 1, .type = TOK_LP});
@@ -383,22 +416,40 @@ static token get_token(const char **p)
         tok.type = TOK_IDENTIFIER;
         switch (tok.len) {
         case 4:
-            if (strncmp(*p, "acos", 4) == 0)
+            if (strncmp(*p, "acos", 4) == 0) {
+                tok.nargs = 1;
                 tok.id = ID_ACOS;
-            else if (strncmp(*p, "atan", 4) == 0)
+            }
+            else if (strncmp(*p, "atan", 4) == 0) {
+                tok.nargs = 1;
                 tok.id = ID_ATAN;
-            else if (strncmp(*p, "asin", 4) == 0)
+            }
+            else if (strncmp(*p, "asin", 4) == 0) {
+                tok.nargs = 1;
                 tok.id = ID_ASIN;
-            else if (strncmp(*p, "sqrt", 4) == 0)
+            }
+            else if (strncmp(*p, "sqrt", 4) == 0) {
+                tok.nargs = 1;
                 tok.id = ID_SQRT;
+            }
             break;
         case 3:
-            if (strncmp(*p, "cos", 3) == 0)
+            if (strncmp(*p, "cos", 3) == 0) {
+                tok.nargs = 1;
                 tok.id = ID_COS;
-            else if (strncmp(*p, "tan", 3) == 0)
+            }
+            else if (strncmp(*p, "tan", 3) == 0) {
+                tok.nargs = 1;
                 tok.id = ID_TAN;
-            else if (strncmp(*p, "sin", 3) == 0)
+            }
+            else if (strncmp(*p, "sin", 3) == 0) {
+                tok.nargs = 1;
                 tok.id = ID_SIN;
+            }
+            else if (strncmp(*p, "pow", 3) == 0) {
+                tok.nargs = 2;
+                tok.id = ID_POW;
+            }
             break;
         default:
             tok.id = ID_UNKNOWN;
@@ -425,19 +476,10 @@ static token expr(const char **p)
 static token unary(const char **p)
 {
     token left = get_token(p);
-    token next;
 
     switch (left.type) {
     case TOK_MINUS:
-        next = unary(p);
-        switch (next.type) {
-        case TOK_NUM:
-            return neg_token(next);
-        case TOK_INVALID:
-            return next;
-        default:
-            return unary(p);
-        }
+        return neg_token(unary(p));
     case TOK_PLUS:
         return unary(p);
     case TOK_INVALID:
@@ -453,26 +495,42 @@ static token func(const char **p)
     token identifier = get_token(p);
     if (identifier.type != TOK_IDENTIFIER) return (token){.type = TOK_INVALID};
     if (identifier.id == ID_UNKNOWN) return (token){.type = TOK_INVALID};
+
     token tmp = get_token(p);
     if (tmp.type != TOK_LP) return (token){.type = TOK_INVALID};
-    unget_token(tmp, p);
-    token arg = unary(p);
-    if (arg.type == TOK_INVALID) return arg;
+
+    token args[MAX_NARGS];
+    for (int i = 0; i < identifier.nargs; i++) {
+        token arg = expr(p);
+        if (arg.type == TOK_INVALID) return arg;
+        args[i] = arg;
+        if (i == identifier.nargs - 1)
+            break;
+        tmp = get_token(p);
+        if (tmp.type != TOK_COMMA) return (token){.type = TOK_INVALID};
+    }
+
+    tmp = get_token(p);
+    if (tmp.type != TOK_RP)
+        return (token){.type = TOK_INVALID};
+
     switch (identifier.id) {
+    case ID_POW:
+        return pow_token(args[0], args[1]);
     case ID_SQRT:
-        return sqrt_token(arg);
+        return sqrt_token(args[0]);
     case ID_COS:
-        return cos_token(arg);
+        return cos_token(args[0]);
     case ID_SIN:
-        return sin_token(arg);
+        return sin_token(args[0]);
     case ID_TAN:
-        return tan_token(arg);
+        return tan_token(args[0]);
     case ID_ACOS:
-        return acos_token(arg);
+        return acos_token(args[0]);
     case ID_ASIN:
-        return asin_token(arg);
+        return asin_token(args[0]);
     case ID_ATAN:
-        return atan_token(arg);
+        return atan_token(args[0]);
     default:
         return (token){.type = TOK_INVALID};
     }

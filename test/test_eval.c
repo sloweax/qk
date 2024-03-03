@@ -49,4 +49,5 @@ void test_eval()
     ASSERT_EVAL(qk_eval_f, f, 1.0);
     ASSERT_EVAL(qk_eval_f, f, -1.0);
     ASSERT_EVAL(qk_eval_f, f, (2.+8.)*(1.+1.));
+    ASSERT_EVAL(qk_eval_f, f, pow(sqrt(9), 2));
 }
