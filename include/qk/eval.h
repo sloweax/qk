@@ -18,7 +18,8 @@ typedef struct {
 /*
 DESCRIPTION
     `qk_eval*` evaluates the expression in `str` and sets the result in `r`
-    using the same operator precedence as in C (supported operators: + - * /)
+    using the same operator precedence as in C (supported operators: + - * /).
+    (supported functions: cos sin tan acos asin atan sqrt pow)
 
 RETURN VALUE
     `qk_eval*` returns QK_OK on success. QK_INVALID if the expression is invalid
