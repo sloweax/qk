@@ -6,8 +6,6 @@ enum {
     QK_OK = 0,
     QK_ERRNO,
     QK_INVALID,
-    QK_OVERFLOW,
-    QK_UNDERFLOW,
 };
 
 /*
