@@ -395,16 +395,18 @@ static token get_token(const char **p)
         return tok;
     }
 
-    errno = 0;
-    tok.value.f = strtof(*p, &end);
-    if (end != *p) {
-        tok.value.type = QK_EVAL_RESULT_FLOAT;
-        tok.type = TOK_NUM;
-        if (errno)
-            tok.type = TOK_INVALID;
-        tok.len = end - *p;
-        *p = end;
-        return tok;
+    if (*end == '.') {
+        errno = 0;
+        tok.value.f = strtof(*p, &end);
+        if (end != *p) {
+            tok.value.type = QK_EVAL_RESULT_FLOAT;
+            tok.type = TOK_NUM;
+            if (errno)
+                tok.type = TOK_INVALID;
+            tok.len = end - *p;
+            *p = end;
+            return tok;
+        }
     }
 
     const char *i = *p;
