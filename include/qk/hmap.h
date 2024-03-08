@@ -75,3 +75,10 @@ QKAPI int qk_hmap_merge(const qk_hmap *src, qk_hmap *dst);
 
 QKAPI size_t qk_hmap_hash_str(const void* s);
 QKAPI int qk_hmap_cmp_str(const void *a, const void *b);
+
+/*
+RETURN VALUE
+    `qk_hmap_collisions` returns the amount of collisions in the hash map `m`
+*/
+
+QKAPI size_t qk_hmap_collisions(const qk_hmap *m);

@@ -34,6 +34,17 @@ void test_hmap()
     assert(qk_hmap_merge(&m, &m2) == QK_OK);
     ASSERT(m2.len == m.len);
 
+    qk_hmap m3;
+    assert(qk_hmap_init(&m3, 1, qk_hmap_hash_str, qk_hmap_cmp_str) == QK_OK);
+    ASSERT(qk_hmap_collisions(&m3) == 0);
+    assert(qk_hmap_set(&m3, "a", NULL) == QK_OK);
+    ASSERT(qk_hmap_collisions(&m3) == 0);
+    assert(qk_hmap_set(&m3, "b", NULL) == QK_OK);
+    ASSERT(qk_hmap_collisions(&m3) == 1);
+    assert(qk_hmap_set(&m3, "c", NULL) == QK_OK);
+    ASSERT(qk_hmap_collisions(&m3) == 2);
+
     qk_hmap_free(&m);
     qk_hmap_free(&m2);
+    qk_hmap_free(&m3);
 }
