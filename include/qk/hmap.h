@@ -4,6 +4,7 @@
 #include <stddef.h>
 
 #define QK_HMAP_STRUCT_ALLOC (1 << 0)
+#define QK_HMAP_TABLE_ALLOC (1 << 1)
 
 typedef struct qk_hmap_node {
     void *key, *value;
@@ -40,6 +41,7 @@ RETURN VALUE
 QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*));
 QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*));
 QKAPI void qk_hmap_free(qk_hmap *m);
+#define QK_HMAP_STACK_CREATE(CAP, HASH, CMP) ((qk_hmap){.flags=0, .len=0, .cap=CAP, .table=(qk_hmap_node*[CAP]){0}, .hash=HASH, .cmp=CMP, .free_key=NULL, .free_value=NULL})
 
 /*
 DESCRIPTION

@@ -23,7 +23,8 @@ QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int 
     qk_hmap_node **t = QK_MALLOC(sizeof(qk_hmap_node*) * cap);
     if (t == NULL) return QK_ERRNO;
     bzero(t, sizeof(qk_hmap_node*) * cap);
-    m->len = m->flags = 0;
+    m->len = 0;
+    m->flags = QK_HMAP_TABLE_ALLOC;
     m->cmp = cmp;
     m->hash = hash;
     m->table = t;
@@ -31,7 +32,6 @@ QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int 
     m->free_key = m->free_value = NULL;
     return QK_OK;
 }
-
 
 QKAPI void qk_hmap_free(qk_hmap *m)
 {
@@ -41,7 +41,9 @@ QKAPI void qk_hmap_free(qk_hmap *m)
             free_node(m, node);
     }
 
-    QK_FREE(m->table);
+    if (m->flags & QK_HMAP_TABLE_ALLOC)
+        QK_FREE(m->table);
+
     if (m->flags & QK_HMAP_STRUCT_ALLOC)
         QK_FREE(m);
 }
