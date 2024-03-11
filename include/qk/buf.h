@@ -38,7 +38,7 @@ QKAPI qk_buf *qk_buf_create(void);
 QKAPI void qk_buf_free(qk_buf *b);
 QKAPI qk_buf *qk_buf_dup(const qk_buf *b);
 QKAPI qk_buf *qk_buf_sdup(const qk_buf *b);
-#define QK_BUF_STACK_CREATE(CAP) {.flags = 0, .len = 0, .cap = (CAP), .data = (unsigned char[(CAP)]){0}}
+#define QK_BUF_STACK_CREATE(CAP) ((qk_buf){.flags = 0, .len = 0, .cap = (CAP), .data = (unsigned char[(CAP)]){0}})
 
 /*
 DESCRIPTION
