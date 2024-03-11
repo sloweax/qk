@@ -51,8 +51,23 @@ void test_hmap()
     assert(qk_hmap_set(&m4, "c", NULL) == QK_OK);
     assert(qk_hmap_set(&m4, "d", NULL) == QK_OK);
 
+    qk_hmap m5;
+    assert(qk_hmap_init(&m5, 1, qk_hmap_hash_str, qk_hmap_cmp_str) == QK_OK);
+    assert(qk_hmap_set(&m5, "123", "abc") == QK_OK);
+    assert(qk_hmap_set(&m5, "a", "a") == QK_OK);
+    assert(qk_hmap_set(&m5, "b", "b") == QK_OK);
+    assert(qk_hmap_set(&m5, "c", "c") == QK_OK);
+    assert(qk_hmap_set(&m5, "d", "d") == QK_OK);
+    assert(qk_hmap_resize(&m5, 10) == QK_OK);
+    ASSERT(strcmp(qk_hmap_get(&m5, "123")->value, "abc") == 0);
+    ASSERT(strcmp(qk_hmap_get(&m5, "a")->value, "a") == 0);
+    ASSERT(strcmp(qk_hmap_get(&m5, "b")->value, "b") == 0);
+    ASSERT(strcmp(qk_hmap_get(&m5, "c")->value, "c") == 0);
+    ASSERT(strcmp(qk_hmap_get(&m5, "d")->value, "d") == 0);
+
     qk_hmap_free(&m);
     qk_hmap_free(&m2);
     qk_hmap_free(&m3);
     qk_hmap_free(&m4);
+    qk_hmap_free(&m5);
 }

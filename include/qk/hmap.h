@@ -69,11 +69,17 @@ DESCRIPTION
     `qk_hmap_merge` will add all nodes of `src` to `dst`. `dst` must be
     previously initialized
 
+    `qk_hmap_resize` changes the hash map `m` capacity to `size`
+
 RETURN VALUE
     `qk_hmap_merge` returns `QK_OK` on success. `QK_ERRNO` on error
+
+    `qk_hmap_resize` returns `QK_OK` on success. `QK_ERRNO` on error and
+    `QK_INVALID` if `size` is 0 or if `m` is `QK_HMAP_STACK_CREATE`'ed
 */
 
 QKAPI int qk_hmap_merge(const qk_hmap *src, qk_hmap *dst);
+QKAPI int qk_hmap_resize(qk_hmap *m, size_t size);
 
 QKAPI size_t qk_hmap_hash_str(const void* s);
 QKAPI int qk_hmap_cmp_str(const void *a, const void *b);
