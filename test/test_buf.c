@@ -31,7 +31,7 @@ void test_buf()
     
     qk_buf_free(&buf);
 
-    qk_buf sbuf = QK_BUF_STATIC_CREATE(10);
+    qk_buf sbuf = QK_BUF_STACK_CREATE(10);
     MUST_ASSERT(sbuf.len == 0 && sbuf.cap == 10 && sbuf.data != NULL);
     MUST_ASSERT(!(sbuf.flags & (QK_BUF_DATA_ALLOC | QK_BUF_STRUCT_ALLOC)));
     MUST_ASSERT(qk_buf_grow(&sbuf, 10) == QK_INVALID && sbuf.cap == 10);

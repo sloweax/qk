@@ -20,7 +20,7 @@ void test_buf_str()
     #endif
     qk_buf_free(&str);
 
-    qk_buf sstr = QK_BUF_STATIC_CREATE(3);
+    qk_buf sstr = QK_BUF_STACK_CREATE(3);
     ASSERT(qk_buf_sset(&sstr, "ab") == QK_OK && sstr.len == 2 && strcmp(sstr.data, "ab") == 0);
     ASSERT(qk_buf_sset(&sstr, "abc") == QK_INVALID && sstr.len == 2 && strcmp(sstr.data, "ab") == 0);
 
