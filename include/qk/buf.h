@@ -1,6 +1,7 @@
 #pragma once
 
 #include "error.h"
+#include "alloc.h"
 #include <stddef.h>
 #include <stdarg.h>
 
@@ -13,6 +14,7 @@
 typedef struct {
     int flags;
     size_t len, cap;
+    const qk_allocator *allocator;
     void *data;
 } qk_buf;
 
@@ -33,8 +35,8 @@ RETURN VALUE
     `qk_buf_*{create,dup}` returns `NULL` on error
 */
 
-QKAPI void qk_buf_init(qk_buf *b);
-QKAPI qk_buf *qk_buf_create(void);
+QKAPI void qk_buf_init(qk_buf *b, const qk_allocator *a);
+QKAPI qk_buf *qk_buf_create(const qk_allocator *a);
 QKAPI void qk_buf_free(qk_buf *b);
 QKAPI qk_buf *qk_buf_dup(const qk_buf *b);
 QKAPI qk_buf *qk_buf_sdup(const qk_buf *b);
@@ -52,8 +54,7 @@ DESCRIPTION
 
     `qk_buf_clear` clears the dynamic buffer without changing the capacity
 
-    `qk_buf_fit` makes the dynamic buffer capacity fit exactly its length. if
-    its length is 0. it will free the data
+    `qk_buf_fit` makes the dynamic buffer capacity fit exactly its length.
 
 RETURN VALUE
     `qk_buf_{grow,reserve,fit}` returns QK_OK on success, QK_INVALID if the

@@ -4,18 +4,19 @@
 
 #define MAX(A, B) (A) > (B) ? (A) : (B)
 
-QKAPI void qk_buf_init(qk_buf *b)
+QKAPI void qk_buf_init(qk_buf *b, const qk_allocator *a)
 {
     b->flags = QK_BUF_DATA_ALLOC;
     b->len = b->cap = 0;
     b->data = NULL;
+    b->allocator = a;
 }
 
-QKAPI qk_buf *qk_buf_create(void)
+QKAPI qk_buf *qk_buf_create(const qk_allocator *a)
 {
-    qk_buf *b = QK_MALLOC(sizeof(qk_buf));
+    qk_buf *b = a->alloc(a->ctx, NULL, 0, sizeof(qk_buf));
     if (b == NULL) return b;
-    qk_buf_init(b);
+    qk_buf_init(b, a);
     b->flags |= QK_BUF_STRUCT_ALLOC;
     return b;
 }
@@ -23,10 +24,10 @@ QKAPI qk_buf *qk_buf_create(void)
 QKAPI void qk_buf_free(qk_buf *b)
 {
     if (b->data && b->flags & QK_BUF_DATA_ALLOC)
-        QK_FREE(b->data);
+        b->allocator->alloc(b->allocator->ctx, b->data, b->cap, 0);
 
     if (b->flags & QK_BUF_STRUCT_ALLOC)
-        QK_FREE(b);
+        b->allocator->alloc(b->allocator->ctx, b, sizeof(qk_buf), 0);
 }
 
 QKAPI int qk_buf_grow(qk_buf *b, size_t cap)
@@ -37,7 +38,7 @@ QKAPI int qk_buf_grow(qk_buf *b, size_t cap)
     if (!(b->flags & QK_BUF_DATA_ALLOC))
         return QK_INVALID;
 
-    void *data = QK_REALLOC(b->data, b->cap + cap);
+    void *data = b->allocator->alloc(b->allocator->ctx, b->data, b->cap, b->cap + cap);
     if (data == NULL) return QK_ERRNO;
     b->data = data;
     b->cap += cap;

@@ -8,7 +8,8 @@
 void test_buf()
 {
     qk_buf buf;
-    qk_buf_init(&buf);
+    qk_allocator allocator = {.alloc = qk_alloc_libc};
+    qk_buf_init(&buf, &allocator);
     MUST_ASSERT(buf.len == 0 && buf.cap == 0 && buf.data == NULL);
     MUST_ASSERT(buf.flags & QK_BUF_DATA_ALLOC);
     MUST_ASSERT(!(buf.flags & QK_BUF_STRUCT_ALLOC));
@@ -61,7 +62,7 @@ void test_buf()
     ASSERT(sbuf.len == 3 && memcmp(sbuf.data, "abc", 3) == 0);
 
     qk_buf dbuf;
-    qk_buf_init(&dbuf);
+    qk_buf_init(&dbuf, &allocator);
     dbuf.flags |= QK_BUF_DOUBLE_CAPACITY;
     #ifdef _GNU_SOURCE
     ASSERT(qk_buf_replace(&dbuf, "!", 1, "a", 1) == QK_OK);

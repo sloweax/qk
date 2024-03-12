@@ -6,7 +6,8 @@
 void test_buf_str()
 {
     qk_buf str;
-    qk_buf_init(&str);
+    qk_allocator allocator = {.alloc = qk_alloc_libc};
+    qk_buf_init(&str, &allocator);
     assert(qk_buf_sset(&str, "hello") == QK_OK);
     MUST_ASSERT(str.cap == 6 && str.len == 5 && strcmp(str.data, "hello") == 0);
     assert(qk_buf_scat(&str, " world") == QK_OK);
@@ -25,7 +26,7 @@ void test_buf_str()
     ASSERT(qk_buf_sset(&sstr, "abc") == QK_INVALID && sstr.len == 2 && strcmp(sstr.data, "ab") == 0);
 
     qk_buf fstr;
-    qk_buf_init(&fstr);
+    qk_buf_init(&fstr, &allocator);
     assert(qk_buf_sprintf(&fstr, "%d%s", 123, "abc") == QK_OK);
     ASSERT(fstr.len == 6 && fstr.cap == 7 && strcmp(fstr.data, "123abc") == 0);
     assert(qk_buf_sprintf(&fstr, "%s", "xyz") == QK_OK);

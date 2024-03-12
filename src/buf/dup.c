@@ -3,7 +3,7 @@
 
 QKAPI qk_buf *qk_buf_dup(const qk_buf *b)
 {
-    qk_buf *r = qk_buf_create();
+    qk_buf *r = qk_buf_create(b->allocator);
     if (r == NULL) return NULL;
     r->flags = b->flags | QK_BUF_ALL_ALLOC;
     if (qk_buf_set(r, b->data, b->len) != QK_OK) {
@@ -15,7 +15,7 @@ QKAPI qk_buf *qk_buf_dup(const qk_buf *b)
 
 QKAPI qk_buf *qk_buf_sdup(const qk_buf *b)
 {
-    qk_buf *r = qk_buf_create();
+    qk_buf *r = qk_buf_create(b->allocator);
     if (r == NULL) return NULL;
     r->flags = b->flags | QK_BUF_ALL_ALLOC;
 
