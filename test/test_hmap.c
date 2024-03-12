@@ -46,10 +46,15 @@ void test_hmap()
 
     qk_hmap m4 = QK_HMAP_STACK_CREATE(2, qk_hmap_hash_str, qk_hmap_cmp_str);
     assert(qk_hmap_set(&m4, "123", "abc") == QK_OK);
-    assert(qk_hmap_set(&m4, "a", NULL) == QK_OK);
-    assert(qk_hmap_set(&m4, "b", NULL) == QK_OK);
-    assert(qk_hmap_set(&m4, "c", NULL) == QK_OK);
-    assert(qk_hmap_set(&m4, "d", NULL) == QK_OK);
+    assert(qk_hmap_set(&m4, "a", "a") == QK_OK);
+    assert(qk_hmap_set(&m4, "b", "b") == QK_OK);
+    assert(qk_hmap_set(&m4, "c", "c") == QK_OK);
+    assert(qk_hmap_set(&m4, "d", "d") == QK_OK);
+    ASSERT(strcmp(qk_hmap_get(&m4, "123")->value, "abc") == 0);
+    ASSERT(strcmp(qk_hmap_get(&m4, "a")->value, "a") == 0);
+    ASSERT(strcmp(qk_hmap_get(&m4, "b")->value, "b") == 0);
+    ASSERT(strcmp(qk_hmap_get(&m4, "c")->value, "c") == 0);
+    ASSERT(strcmp(qk_hmap_get(&m4, "d")->value, "d") == 0);
 
     qk_hmap m5;
     assert(qk_hmap_init(&m5, 1, qk_hmap_hash_str, qk_hmap_cmp_str) == QK_OK);
