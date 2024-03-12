@@ -1,11 +1,9 @@
 #pragma once
-#include "../../include/qk.h"
 #include "../../include/qk/hmap.h"
-#include <stdlib.h>
 
-static qk_hmap_node *create_node(void *k, void *v)
+static qk_hmap_node *create_node(const qk_allocator *a, void *k, void *v)
 {
-    qk_hmap_node *n = QK_MALLOC(sizeof(qk_hmap_node));
+    qk_hmap_node *n = a->alloc(a->ctx, NULL, 0, sizeof(qk_hmap_node));
     if (n == NULL) return n;
     n->key = k;
     n->value = v;
@@ -15,7 +13,9 @@ static qk_hmap_node *create_node(void *k, void *v)
 
 static void free_node(qk_hmap *m, qk_hmap_node *n)
 {
-    if (m->free_key)   m->free_key(n->key);
-    if (m->free_value) m->free_value(n->value);
-    QK_FREE(n);
+    if (m->flags & QK_HMAP_FREE_KEY)
+        m->allocator->alloc(m->allocator->ctx, n->key, 0, 0);
+    if (m->flags & QK_HMAP_FREE_VALUE)
+        m->allocator->alloc(m->allocator->ctx, n->value, 0, 0);
+    m->allocator->alloc(m->allocator->ctx, n, sizeof(qk_hmap_node), 0);
 }

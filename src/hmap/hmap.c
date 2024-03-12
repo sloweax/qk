@@ -4,23 +4,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*))
+QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*), const qk_allocator *a)
 {
     if (cap == 0 || cmp == NULL || hash == NULL) return NULL;
-    qk_hmap *m = QK_MALLOC(sizeof(qk_hmap));
+    qk_hmap *m = a->alloc(a->ctx, NULL, 0, sizeof(qk_hmap));
     if (m == NULL) return m;
-    if (qk_hmap_init(m, cap, hash, cmp) != QK_OK) {
-        QK_FREE(m);
+    if (qk_hmap_init(m, cap, hash, cmp, a) != QK_OK) {
+        a->alloc(a->ctx, m, sizeof(qk_hmap), 0);
         return NULL;
     }
     m->flags |= QK_HMAP_STRUCT_ALLOC;
     return m;
 }
 
-QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*))
+QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*), const qk_allocator *a)
 {
     if (cap == 0 || cmp == NULL || hash == NULL) return QK_INVALID;
-    qk_hmap_node **t = QK_MALLOC(sizeof(qk_hmap_node*) * cap);
+    qk_hmap_node **t = a->alloc(a->ctx, NULL, 0, sizeof(qk_hmap_node*) * cap);
     if (t == NULL) return QK_ERRNO;
     bzero(t, sizeof(qk_hmap_node*) * cap);
     m->len = 0;
@@ -29,7 +29,7 @@ QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int 
     m->hash = hash;
     m->table = t;
     m->cap = cap;
-    m->free_key = m->free_value = NULL;
+    m->allocator = a;
     return QK_OK;
 }
 
@@ -42,10 +42,10 @@ QKAPI void qk_hmap_free(qk_hmap *m)
     }
 
     if (m->flags & QK_HMAP_TABLE_ALLOC)
-        QK_FREE(m->table);
+        m->allocator->alloc(m->allocator->ctx, m->table, sizeof(qk_hmap_node*) * m->cap, 0);
 
     if (m->flags & QK_HMAP_STRUCT_ALLOC)
-        QK_FREE(m);
+        m->allocator->alloc(m->allocator->ctx, m, sizeof(qk_hmap), 0);
 }
 
 QKAPI int qk_hmap_set(qk_hmap *m, void *key, void *value)
@@ -54,7 +54,7 @@ QKAPI int qk_hmap_set(qk_hmap *m, void *key, void *value)
     qk_hmap_node *node = m->table[index], *prev = NULL, *next = NULL;
 
     if (node == NULL) {
-        node = create_node(key, value);
+        node = create_node(m->allocator, key, value);
         if (node == NULL) return QK_ERRNO;
         m->len++;
         m->table[index] = node;
@@ -63,14 +63,14 @@ QKAPI int qk_hmap_set(qk_hmap *m, void *key, void *value)
 
     for (; node && (next = node->next, 1); prev = node, node = next) {
         if (m->cmp(node->key, key) == 0) {
-            if (m->free_value && value != node->value)
-                m->free_value(node->value);
+            if ((m->flags & QK_HMAP_FREE_VALUE) && value != node->value)
+                m->allocator->alloc(m->allocator->ctx, node->value, 0, 0);
             node->value = value;
             return QK_OK;
         }
     }
 
-    node = create_node(key, value);
+    node = create_node(m->allocator, key, value);
     if (node == NULL) return QK_ERRNO;
 
     m->len++;

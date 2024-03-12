@@ -1,10 +1,15 @@
 #pragma once
 
+#include "alloc.h"
 #include "error.h"
 #include <stddef.h>
 
 #define QK_HMAP_STRUCT_ALLOC (1 << 0)
-#define QK_HMAP_TABLE_ALLOC (1 << 1)
+#define QK_HMAP_TABLE_ALLOC  (1 << 1)
+/* free key/value when overwriting(only applied to value)/deleting
+   (allocator must be able to free without having to specify `oldsz`) */
+#define QK_HMAP_FREE_KEY     (1 << 2)
+#define QK_HMAP_FREE_VALUE   (1 << 3)
 
 typedef struct qk_hmap_node {
     void *key, *value;
@@ -18,8 +23,7 @@ typedef struct qk_hmap {
     qk_hmap_node **table;
     size_t (*hash)(const void*);
     int (*cmp)(const void*, const void*);
-    void (*free_key)(void*);
-    void (*free_value)(void*);
+    const qk_allocator *allocator;
 } qk_hmap;
 
 /*
@@ -28,8 +32,7 @@ DESCRIPTION
 
     `qk_hmap_create` creates and initializes a hash map
 
-    `qk_hmap_free` frees the hash map `m`. if `m->free_key` or `m->free_value`
-    is set. it will also free its keys / values
+    `qk_hmap_free` frees the hash map `m`
 
 RETURN VALUE
     `qk_hmap_init` returns `QK_OK` on success. `QK_INVALID` or `QK_ERRNO`
@@ -38,21 +41,18 @@ RETURN VALUE
     `qk_hmap_create` returns `NULL` on error
 */
 
-QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*));
-QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*));
+QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*), const qk_allocator *a);
+QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*), const qk_allocator *a);
 QKAPI void qk_hmap_free(qk_hmap *m);
-#define QK_HMAP_STACK_CREATE(CAP, HASH, CMP) ((qk_hmap){.flags=0, .len=0, .cap=CAP, .table=(qk_hmap_node*[CAP]){0}, .hash=HASH, .cmp=CMP, .free_key=NULL, .free_value=NULL})
+#define QK_HMAP_STACK_CREATE(CAP, HASH, CMP, ALLOC) ((qk_hmap){.flags=0, .len=0, .cap=CAP, .table=(qk_hmap_node*[CAP]){0}, .hash=HASH, .cmp=CMP, .allocator=ALLOC})
 
 /*
 DESCRIPTION
-    `qk_hmap_set` will set `key` with `value` on the hash map `m`. if
-    `m->free_value` is set and overwriting is detected. it will replace and
-    free the old value
+    `qk_hmap_set` will set `key` with `value` on the hash map `m`
 
     `qk_hmap_get` will get the hash map node of `key`
 
-    `qk_hmap_delete` will remove and free the node of `key`. if `m->free_key`
-    or `m->free_value` is set. it will also free its key/value
+    `qk_hmap_delete` will remove and free the node of `key`
 
 RETURN VALUE
     `qk_hmap_set` returns `QK_OK` on success. `QK_ERRNO` on error
