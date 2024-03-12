@@ -1,7 +1,6 @@
 #include "../../include/qk.h"
 #include "../../include/qk/hmap.h"
 #include "node.h"
-#include <stdlib.h>
 #include <string.h>
 
 QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*), const qk_allocator *a)

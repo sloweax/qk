@@ -1,5 +1,4 @@
 #include "../../include/qk/buf.h"
-#include <stdlib.h>
 #include <string.h>
 
 #define MAX(A, B) (A) > (B) ? (A) : (B)

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../../include/qk/ll.h"
-#include <stdlib.h>
 
 static qk_ll_node *create_node(const qk_allocator *a, void *data)
 {

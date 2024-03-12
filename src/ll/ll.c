@@ -1,7 +1,6 @@
 #include "free_node.h"
 #include "../../include/qk.h"
 #include "../../include/qk/ll.h"
-#include <stdlib.h>
 
 QKAPI void qk_ll_init(qk_ll *ll, const qk_allocator *a)
 {

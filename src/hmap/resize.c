@@ -1,5 +1,4 @@
 #include "../../include/qk/hmap.h"
-#include <stdlib.h>
 
 QKAPI int qk_hmap_resize(qk_hmap *m, size_t size)
 {

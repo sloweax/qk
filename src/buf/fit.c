@@ -1,5 +1,4 @@
 #include "../../include/qk/buf.h"
-#include <stdlib.h>
 
 QKAPI int qk_buf_sfit(qk_buf *b)
 {
