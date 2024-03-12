@@ -3,17 +3,18 @@
 #include "../../include/qk/ll.h"
 #include <stdlib.h>
 
-QKAPI void qk_ll_init(qk_ll *ll)
+QKAPI void qk_ll_init(qk_ll *ll, const qk_allocator *a)
 {
     ll->head = ll->tail = NULL;
     ll->len = ll->flags = 0;
+    ll->allocator = a;
 }
 
-QKAPI qk_ll *qk_ll_create(void)
+QKAPI qk_ll *qk_ll_create(const qk_allocator *a)
 {
-    qk_ll *ll = QK_MALLOC(sizeof(qk_ll));
+    qk_ll *ll = a->alloc(a->ctx, NULL, 0, sizeof(qk_ll));
     if (ll == NULL) return ll;
-    qk_ll_init(ll);
+    qk_ll_init(ll, a);
     ll->flags |= QK_LL_STRUCT_ALLOC;
     return ll;
 }
@@ -23,8 +24,8 @@ QKAPI void qk_ll_free(qk_ll *ll)
     qk_ll_node *node, *next;
 
     QK_LL_FOREACH_SAFEX(ll, node, next)
-        free_node(node);
+        free_node(ll->allocator, node);
 
     if (ll->flags & QK_LL_STRUCT_ALLOC)
-        QK_FREE(ll);
+        ll->allocator->alloc(ll->allocator->ctx, ll, sizeof(qk_ll), 0);
 }

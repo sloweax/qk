@@ -3,7 +3,7 @@
 #include "../../include/qk/ll.h"
 #include <stdlib.h>
 
-static void free_node(qk_ll_node *node)
+static void free_node(const qk_allocator *a, qk_ll_node *node)
 {
-    QK_FREE(node);
+    a->alloc(a->ctx, node, sizeof(qk_ll_node), 0);
 }

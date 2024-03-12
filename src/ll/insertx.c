@@ -7,7 +7,7 @@ QKAPI int INSERT_BEFORE(qk_ll *ll, qk_ll_node *node, void *data)  \
 {                                                                 \
     if (node == ll->HEAD) return INSERT_HEAD(ll, data);           \
                                                                   \
-    qk_ll_node *new_node = create_node(data);                     \
+    qk_ll_node *new_node = create_node(ll->allocator, data);      \
     if (new_node == NULL) return QK_ERRNO;                        \
                                                                   \
     new_node->NEXT = node;                                        \
@@ -19,20 +19,20 @@ QKAPI int INSERT_BEFORE(qk_ll *ll, qk_ll_node *node, void *data)  \
     return QK_OK;                                                 \
 }
 
-#define LL_INSERTX(INSERT_TAIL, HEAD, TAIL, PREV, NEXT) \
-QKAPI int INSERT_TAIL(qk_ll *ll, void *data)          \
-{                                                   \
-    qk_ll_node *node = create_node(data);           \
-    if (node == NULL) return QK_ERRNO;              \
-    if (ll->len == 0) {                             \
-        ll->HEAD = ll->TAIL = node;                 \
-    } else {                                        \
-        node->PREV = ll->TAIL;                      \
-        ll->TAIL->NEXT = node;                      \
-        ll->TAIL = node;                            \
-    }                                               \
-    ll->len++;                                      \
-    return QK_OK;                                   \
+#define LL_INSERTX(INSERT_TAIL, HEAD, TAIL, PREV, NEXT)  \
+QKAPI int INSERT_TAIL(qk_ll *ll, void *data)             \
+{                                                        \
+    qk_ll_node *node = create_node(ll->allocator, data); \
+    if (node == NULL) return QK_ERRNO;                   \
+    if (ll->len == 0) {                                  \
+        ll->HEAD = ll->TAIL = node;                      \
+    } else {                                             \
+        node->PREV = ll->TAIL;                           \
+        ll->TAIL->NEXT = node;                           \
+        ll->TAIL = node;                                 \
+    }                                                    \
+    ll->len++;                                           \
+    return QK_OK;                                        \
 }
 
 LL_INSERTX(qk_ll_insert_tail, head, tail, prev, next)

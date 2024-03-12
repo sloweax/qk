@@ -10,17 +10,17 @@ QKAPI void *REMOVE_TAIL(qk_ll *ll)                      \
     switch (ll->len) {                                  \
     case 0: return NULL;                                \
     case 1:                                             \
-        free_node(ll->TAIL);                            \
+        free_node(ll->allocator, ll->TAIL);             \
         ll->HEAD = ll->TAIL = NULL;                     \
         break;                                          \
     case 2:                                             \
-        free_node(ll->TAIL);                            \
+        free_node(ll->allocator, ll->TAIL);             \
         ll->HEAD->NEXT = NULL;                          \
         ll->TAIL = ll->HEAD;                            \
         break;                                          \
     default:                                            \
         node = ll->TAIL->PREV;                          \
-        free_node(ll->TAIL);                            \
+        free_node(ll->allocator, ll->TAIL);             \
         ll->TAIL = node;                                \
         ll->TAIL->NEXT = NULL;                          \
         break;                                          \
@@ -40,7 +40,7 @@ QKAPI void *qk_ll_remove(qk_ll *ll, qk_ll_node *node)
 
     void *data = node->data;
     qk_ll_node *prev = node->prev, *next = node->next;
-    free_node(node);
+    free_node(ll->allocator, node);
     prev->next = next;
     next->prev = prev;
     ll->len--;
