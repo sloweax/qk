@@ -10,7 +10,7 @@ QKAPI int qk_buf_sfit(qk_buf *b)
         return QK_INVALID;
 
     void *data = b->allocator->alloc(b->allocator->ctx, b->data, b->cap, b->len+1);
-    if (data == NULL && b->len != 0) return QK_ERRNO;
+    if (data == NULL) return QK_ERRNO;
 
     b->data = data;
     b->cap = b->len+1;
