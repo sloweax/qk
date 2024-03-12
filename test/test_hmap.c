@@ -31,7 +31,7 @@ void test_hmap()
 
     qk_hmap m2;
     assert(qk_hmap_init(&m2, 10, qk_hmap_hash_str, qk_hmap_cmp_str) == QK_OK);
-    assert(qk_hmap_merge(&m, &m2) == QK_OK);
+    assert(qk_hmap_merge(&m2, &m) == QK_OK);
     ASSERT(m2.len == m.len);
 
     qk_hmap m3;

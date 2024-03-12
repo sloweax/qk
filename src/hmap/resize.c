@@ -13,7 +13,7 @@ QKAPI int qk_hmap_resize(qk_hmap *m, size_t size)
     int r = qk_hmap_init(&tmp, size, m->hash, m->cmp);
     if (r != QK_OK) return r;
 
-    r = qk_hmap_merge(m, &tmp);
+    r = qk_hmap_merge(&tmp, m);
     if (r != QK_OK) {
         qk_hmap_free(&tmp);
         return r;

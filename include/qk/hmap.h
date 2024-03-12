@@ -78,7 +78,7 @@ RETURN VALUE
     `QK_INVALID` if `size` is 0 or if `m` is `QK_HMAP_STACK_CREATE`'ed
 */
 
-QKAPI int qk_hmap_merge(const qk_hmap *src, qk_hmap *dst);
+QKAPI int qk_hmap_merge(qk_hmap *dst, const qk_hmap *src);
 QKAPI int qk_hmap_resize(qk_hmap *m, size_t size);
 
 QKAPI size_t qk_hmap_hash_str(const void* s);
