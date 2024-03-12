@@ -14,7 +14,10 @@ QKAPI int qk_hmap_resize(qk_hmap *m, size_t size)
     if (r != QK_OK) return r;
 
     r = qk_hmap_merge(m, &tmp);
-    if (r != QK_OK) return r;
+    if (r != QK_OK) {
+        qk_hmap_free(&tmp);
+        return r;
+    }
 
     qk_hmap_node *node, *next;
     for (size_t i = 0; i < m->cap; i++) {
