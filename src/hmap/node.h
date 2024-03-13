@@ -13,11 +13,9 @@ static qk_hmap_node *create_node(qk_allocator *a, void *k, void *v)
 
 static void free_node(qk_hmap *m, qk_hmap_node *n)
 {
-    if (m->kvallocator) {
-        if (m->free_key)
-            m->free_key(m->kvallocator, n->key, 0, 0);
-        if (m->free_value)
-            m->free_value(m->kvallocator, n->value, 0, 0);
-    }
+    if (m->flags & QK_HMAP_FREE_KEY)
+        m->alloc_key(m->kvallocator, n->key, 0, 0);
+    if (m->flags & QK_HMAP_FREE_VALUE)
+        m->alloc_value(m->kvallocator, n->value, 0, 0);
     m->allocator->alloc(m->allocator, n, sizeof(qk_hmap_node), 0);
 }

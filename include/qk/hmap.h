@@ -6,6 +6,10 @@
 
 #define QK_HMAP_STRUCT_ALLOC (1 << 0)
 #define QK_HMAP_TABLE_ALLOC  (1 << 1)
+/* free key/value when overwriting(only applied to value)/deleting
+    unsing kvallocator */
+#define QK_HMAP_FREE_KEY     (1 << 2)
+#define QK_HMAP_FREE_VALUE   (1 << 3)
 
 typedef struct qk_hmap_node {
     void *key, *value;
@@ -21,10 +25,9 @@ typedef struct qk_hmap {
     int (*cmp)(const void*, const void*);
     qk_allocator *allocator;
 
-    // free key/value when overwriting(only applied to value)/deleting
     qk_allocator *kvallocator;
-    void *(*free_key)(qk_allocator *ctx, void *p, size_t oldsz, size_t newsz);
-    void *(*free_value)(qk_allocator *ctx, void *p, size_t oldsz, size_t newsz);
+    void *(*alloc_key)(qk_allocator *ctx, void *p, size_t oldsz, size_t newsz);
+    void *(*alloc_value)(qk_allocator *ctx, void *p, size_t oldsz, size_t newsz);
 } qk_hmap;
 
 /*
