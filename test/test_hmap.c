@@ -81,11 +81,8 @@ void test_hmap()
     assert(qk_hmap_set(&m6, abc, one23) == QK_OK);
     ASSERT(strcmp(qk_hmap_get(&m6, one23)->value, "abc") == 0);
     ASSERT(strcmp(qk_hmap_get(&m6, abc)->value, "123") == 0);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstring-compare"
     ASSERT((char*)qk_hmap_get(&m6, "123")->value != abc);
     ASSERT((char*)qk_hmap_get(&m6, "abc")->value != one23);
-#pragma GCC diagnostic pop
 
     qk_hmap_free(&m);
     qk_hmap_free(&m2);
