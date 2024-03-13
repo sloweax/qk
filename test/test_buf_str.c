@@ -6,7 +6,8 @@
 void test_buf_str()
 {
     qk_buf str;
-    qk_allocator allocator = {.alloc = qk_alloc_libc};
+    qk_allocator allocator = QK_ALLOCATOR_LIBC;
+
     qk_buf_init(&str, &allocator);
     assert(qk_buf_sset(&str, "hello") == QK_OK);
     MUST_ASSERT(str.cap == 6 && str.len == 5 && strcmp(str.data, "hello") == 0);
