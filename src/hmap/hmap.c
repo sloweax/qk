@@ -64,15 +64,19 @@ QKAPI int qk_hmap_set(qk_hmap *m, void *key, void *value)
 
     for (; node && (next = node->next, 1); prev = node, node = next) {
         if (m->cmp(node->key, key) == 0) {
-            if ((m->flags & QK_HMAP_FREE_VALUE) && value != node->value)
-                m->alloc_value(m->kvallocator, node->value, 0, 0);
+            qk_hmap_node *newvalue, *oldvalue;
+            newvalue = value;
+            oldvalue = node->value;
 
             if (m->flags & QK_HMAP_DUP_VALUE) {
-                value = m->alloc_value(m->kvallocator, value, 0, 1);
-                if (value == NULL) return QK_ERRNO;
+                newvalue = m->alloc_value(m->kvallocator, value, 0, 1);
+                if (newvalue == NULL) return QK_ERRNO;
             }
 
-            node->value = value;
+            if ((m->flags & QK_HMAP_FREE_VALUE) && newvalue != oldvalue)
+                m->alloc_value(m->kvallocator, oldvalue, 0, 0);
+
+            node->value = newvalue;
             return QK_OK;
         }
     }

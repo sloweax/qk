@@ -75,14 +75,16 @@ void test_hmap()
     m6.flags |= QK_HMAP_FREE_KEY | QK_HMAP_FREE_VALUE | QK_HMAP_DUP_KEY | QK_HMAP_DUP_VALUE;
     m6.kvallocator = m6.allocator;
     m6.alloc_key = m6.alloc_value = qk_hmap_alloc_str;
-    assert(qk_hmap_set(&m6, "123", "abc") == QK_OK);
-    assert(qk_hmap_set(&m6, "abc", "123") == QK_OK);
-    ASSERT(strcmp(qk_hmap_get(&m6, "123")->value, "abc") == 0);
-    ASSERT(strcmp(qk_hmap_get(&m6, "abc")->value, "123") == 0);
+    char *abc = "abc";
+    char *one23 = "123";
+    assert(qk_hmap_set(&m6, one23, abc) == QK_OK);
+    assert(qk_hmap_set(&m6, abc, one23) == QK_OK);
+    ASSERT(strcmp(qk_hmap_get(&m6, one23)->value, "abc") == 0);
+    ASSERT(strcmp(qk_hmap_get(&m6, abc)->value, "123") == 0);
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstring-compare"
-    ASSERT(qk_hmap_get(&m6, "123")->value != "abc");
-    ASSERT(qk_hmap_get(&m6, "abc")->value != "123");
+    ASSERT((char*)qk_hmap_get(&m6, "123")->value != abc);
+    ASSERT((char*)qk_hmap_get(&m6, "abc")->value != one23);
 #pragma GCC diagnostic pop
 
     qk_hmap_free(&m);
