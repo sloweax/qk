@@ -14,7 +14,7 @@
 typedef struct {
     int flags;
     size_t len, cap;
-    const qk_allocator *allocator;
+    qk_allocator *allocator;
     void *data;
 } qk_buf;
 
@@ -35,8 +35,8 @@ RETURN VALUE
     `qk_buf_*{create,dup}` returns `NULL` on error
 */
 
-QKAPI void qk_buf_init(qk_buf *b, const qk_allocator *a);
-QKAPI qk_buf *qk_buf_create(const qk_allocator *a);
+QKAPI void qk_buf_init(qk_buf *b, qk_allocator *a);
+QKAPI qk_buf *qk_buf_create(qk_allocator *a);
 QKAPI void qk_buf_free(qk_buf *b);
 QKAPI qk_buf *qk_buf_dup(const qk_buf *b);
 QKAPI qk_buf *qk_buf_sdup(const qk_buf *b);

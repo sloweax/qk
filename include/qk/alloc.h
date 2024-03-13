@@ -3,22 +3,22 @@
 #include "../qk.h"
 #include <stddef.h>
 
-typedef struct {
-    void *ctx;
-    void *(*alloc)(void *ctx, void *p, size_t oldsz, size_t newsz);
-} qk_allocator;
+typedef struct qk_allocator qk_allocator;
 
-QKAPI void *qk_alloc_libc(void *ctx, void *p, size_t oldsz, size_t newsz);
+struct qk_allocator {
+    void *(*alloc)(qk_allocator *ctx, void *p, size_t oldsz, size_t newsz);
+};
 
+QKAPI void *qk_alloc_libc(qk_allocator *ctx, void *p, size_t oldsz, size_t newsz);
 #define QK_ALLOCATOR_LIBC ((qk_allocator){.alloc=qk_alloc_libc})
 
 typedef struct {
+    qk_allocator allocator;
     unsigned char *buf;
+    unsigned char *pos;
     size_t cap;
-    size_t len;
-    unsigned short align;
+    unsigned int align;
 } qk_allocator_fixed;
 
-QKAPI void *qk_alloc_fixed(void *ctx, void *p, size_t oldsz, size_t newsz);
-
-#define QK_ALLOCATOR_FIXED_STACK_CREATE(CAP, ALIGN) ((qk_allocator){.alloc=qk_alloc_fixed, .ctx=&(qk_allocator_fixed){.align=ALIGN, .cap=CAP, .buf=(unsigned char[CAP]){0}, .len=0}})
+QKAPI void *qk_alloc_fixed(qk_allocator *ctx, void *p, size_t oldsz, size_t newsz);
+QKAPI void qk_allocator_fixed_init(qk_allocator_fixed *a, void *buf, size_t sz, unsigned int align);

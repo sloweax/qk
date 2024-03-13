@@ -21,9 +21,9 @@ QKAPI int qk_hmap_resize(qk_hmap *m, size_t size)
     qk_hmap_node *node, *next;
     for (size_t i = 0; i < m->cap; i++) {
         for (node = m->table[i]; node && (next = node->next, 1); node = next)
-            m->allocator->alloc(m->allocator->ctx, node, sizeof(qk_hmap_node), 0);
+            m->allocator->alloc(m->allocator, node, sizeof(qk_hmap_node), 0);
     }
-    m->allocator->alloc(m->allocator->ctx, m->table, sizeof(qk_hmap_node*) * m->cap, 0);
+    m->allocator->alloc(m->allocator, m->table, sizeof(qk_hmap_node*) * m->cap, 0);
 
     m->cap = size;
     m->table = tmp.table;

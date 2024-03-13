@@ -23,7 +23,7 @@ typedef struct qk_hmap {
     qk_hmap_node **table;
     size_t (*hash)(const void*);
     int (*cmp)(const void*, const void*);
-    const qk_allocator *allocator;
+    qk_allocator *allocator;
 } qk_hmap;
 
 /*
@@ -41,8 +41,8 @@ RETURN VALUE
     `qk_hmap_create` returns `NULL` on error
 */
 
-QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*), const qk_allocator *a);
-QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*), const qk_allocator *a);
+QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*), qk_allocator *a);
+QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*), qk_allocator *a);
 QKAPI void qk_hmap_free(qk_hmap *m);
 #define QK_HMAP_STACK_CREATE(CAP, HASH, CMP, ALLOC) ((qk_hmap){.flags=0, .len=0, .cap=CAP, .table=(qk_hmap_node*[CAP]){0}, .hash=HASH, .cmp=CMP, .allocator=ALLOC})
 

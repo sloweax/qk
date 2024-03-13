@@ -2,16 +2,16 @@
 #include "../../include/qk.h"
 #include "../../include/qk/ll.h"
 
-QKAPI void qk_ll_init(qk_ll *ll, const qk_allocator *a)
+QKAPI void qk_ll_init(qk_ll *ll, qk_allocator *a)
 {
     ll->head = ll->tail = NULL;
     ll->len = ll->flags = 0;
     ll->allocator = a;
 }
 
-QKAPI qk_ll *qk_ll_create(const qk_allocator *a)
+QKAPI qk_ll *qk_ll_create(qk_allocator *a)
 {
-    qk_ll *ll = a->alloc(a->ctx, NULL, 0, sizeof(qk_ll));
+    qk_ll *ll = a->alloc(a, NULL, 0, sizeof(qk_ll));
     if (ll == NULL) return ll;
     qk_ll_init(ll, a);
     ll->flags |= QK_LL_STRUCT_ALLOC;
@@ -26,5 +26,5 @@ QKAPI void qk_ll_free(qk_ll *ll)
         free_node(ll->allocator, node);
 
     if (ll->flags & QK_LL_STRUCT_ALLOC)
-        ll->allocator->alloc(ll->allocator->ctx, ll, sizeof(qk_ll), 0);
+        ll->allocator->alloc(ll->allocator, ll, sizeof(qk_ll), 0);
 }

@@ -35,7 +35,7 @@ typedef struct qk_ll {
     int flags;
     size_t len;
     qk_ll_node *head, *tail;
-    const qk_allocator *allocator;
+    qk_allocator *allocator;
 } qk_ll;
 
 /*
@@ -51,8 +51,8 @@ RETURN VALUE
     `qk_ll_create` returns `NULL` on error
 */
 
-QKAPI void qk_ll_init(qk_ll *ll, const qk_allocator *a);
-QKAPI qk_ll *qk_ll_create(const qk_allocator *a);
+QKAPI void qk_ll_init(qk_ll *ll, qk_allocator *a);
+QKAPI qk_ll *qk_ll_create(qk_allocator *a);
 QKAPI void qk_ll_free(qk_ll *ll);
 
 /*
