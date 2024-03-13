@@ -8,7 +8,7 @@ void test_hmap()
 {
     qk_hmap m;
     qk_hmap_node *n;
-    qk_allocator allocator = {.alloc = qk_alloc_libc};
+    qk_allocator allocator = QK_ALLOCATOR_LIBC;
 
     MUST_ASSERT(qk_hmap_init(&m, 0, qk_hmap_hash_str, qk_hmap_cmp_str, &allocator) == QK_INVALID);
     MUST_ASSERT(qk_hmap_init(&m, 2, NULL, NULL, &allocator) == QK_INVALID);

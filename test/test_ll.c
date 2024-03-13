@@ -9,7 +9,7 @@ void test_ll()
 {
     qk_ll ll;
     qk_ll_node *node;
-    qk_allocator allocator = {.alloc = qk_alloc_libc};
+    qk_allocator allocator = QK_ALLOCATOR_LIBC;
     qk_ll_init(&ll, &allocator);
     ASSERT(!(ll.flags & QK_LL_STRUCT_ALLOC));
     ASSERT(ll.len == 0 && ll.head == ll.tail && ll.head == NULL);

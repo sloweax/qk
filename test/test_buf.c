@@ -8,7 +8,8 @@
 void test_buf()
 {
     qk_buf buf;
-    qk_allocator allocator = {.alloc = qk_alloc_libc};
+    qk_allocator allocator = QK_ALLOCATOR_FIXED_STACK_CREATE(4096, 16);
+
     qk_buf_init(&buf, &allocator);
     MUST_ASSERT(buf.len == 0 && buf.cap == 0 && buf.data == NULL);
     MUST_ASSERT(buf.flags & QK_BUF_DATA_ALLOC);
