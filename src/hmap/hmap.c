@@ -55,7 +55,7 @@ QKAPI int qk_hmap_set(qk_hmap *m, void *key, void *value)
     qk_hmap_node *node = m->table[index], *prev = NULL, *next = NULL;
 
     if (node == NULL) {
-        node = create_node(m->allocator, key, value);
+        node = create_node(m, key, value);
         if (node == NULL) return QK_ERRNO;
         m->len++;
         m->table[index] = node;
@@ -66,12 +66,18 @@ QKAPI int qk_hmap_set(qk_hmap *m, void *key, void *value)
         if (m->cmp(node->key, key) == 0) {
             if ((m->flags & QK_HMAP_FREE_VALUE) && value != node->value)
                 m->alloc_value(m->kvallocator, node->value, 0, 0);
+
+            if (m->flags & QK_HMAP_DUP_VALUE) {
+                value = m->alloc_value(m->kvallocator, value, 0, 1);
+                if (value == NULL) return QK_ERRNO;
+            }
+
             node->value = value;
             return QK_OK;
         }
     }
 
-    node = create_node(m->allocator, key, value);
+    node = create_node(m, key, value);
     if (node == NULL) return QK_ERRNO;
 
     m->len++;

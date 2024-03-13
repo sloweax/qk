@@ -7,9 +7,13 @@
 #define QK_HMAP_STRUCT_ALLOC (1 << 0)
 #define QK_HMAP_TABLE_ALLOC  (1 << 1)
 /* free key/value when overwriting(only applied to value)/deleting
-    unsing kvallocator */
+   unsing kvallocator alloc(newsz == 0) */
 #define QK_HMAP_FREE_KEY     (1 << 2)
 #define QK_HMAP_FREE_VALUE   (1 << 3)
+/* dup key/value when overwrinting(only applied to value)/creating
+   unsing kvallocator alloc(newsz != 0) */
+#define QK_HMAP_DUP_KEY      (1 << 4)
+#define QK_HMAP_DUP_VALUE    (1 << 5)
 
 typedef struct qk_hmap_node {
     void *key, *value;
@@ -94,3 +98,14 @@ RETURN VALUE
 */
 
 QKAPI size_t qk_hmap_collisions(const qk_hmap *m);
+
+/*
+DESCRIPTION
+    `qk_hmap_alloc_str` is a helper meant to be used with c strings and
+    `QK_HMAP_{FREE,DUP}_{KEY,VALUE}`
+
+RETURN VALUE
+    `qk_hmap_alloc_str` returns NULL on error
+*/
+
+QKAPI void *qk_hmap_alloc_str(qk_allocator *ctx, void *p, size_t oldsz, size_t newsz);
