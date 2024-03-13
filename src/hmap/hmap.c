@@ -65,7 +65,7 @@ QKAPI int qk_hmap_set(qk_hmap *m, void *key, void *value)
     for (; node && (next = node->next, 1); prev = node, node = next) {
         if (m->cmp(node->key, key) == 0) {
             if (m->kvallocator && m->free_value && value != node->value)
-                m->kvallocator->alloc(m->kvallocator, node->value, 0, 0);
+                m->free_value(m->kvallocator, node->value, 0, 0);
             node->value = value;
             return QK_OK;
         }
