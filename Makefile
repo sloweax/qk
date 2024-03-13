@@ -6,12 +6,13 @@ CFLAGS+=-O2 -fdata-sections -ffunction-sections -fPIC
 LIBDESTPATH=/usr/local/lib
 INCDESTPATH=/usr/local/include
 OBJ=$(patsubst %.c,%.o,$(wildcard src/*/*.c))
+LIBS=-lm
 
 %.o: %.c
 	$(CC) $(CFLAGS) $^ -c -o $@
 
 libqk.so: $(OBJ)
-	$(CC) $(CFLAGS) -shared $(OBJ) -o $@
+	$(CC) $(CFLAGS) -shared $(OBJ) $(LIBS) -o $@
 
 libqk.a: $(OBJ)
 	$(AR) rcs $@ $^
