@@ -72,7 +72,7 @@ void test_hmap()
     ASSERT(strcmp(qk_hmap_get(&m5, "d")->value, "d") == 0);
 
     qk_hmap m6 = QK_HMAP_STACK_CREATE(10, qk_hmap_hash_str, qk_hmap_cmp_str, &allocator);
-    m6.flags |= QK_HMAP_FREE_KEY | QK_HMAP_FREE_VALUE | QK_HMAP_DUP_KEY | QK_HMAP_DUP_VALUE;
+    m6.flags |= QK_HMAP_FREE_ALL | QK_HMAP_DUP_ALL;
     m6.kvallocator = m6.allocator;
     m6.alloc_key = m6.alloc_value = qk_hmap_alloc_str;
     char *abc = "abc";

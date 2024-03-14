@@ -10,10 +10,12 @@
    unsing kvallocator alloc(newsz == 0) */
 #define QK_HMAP_FREE_KEY     (1 << 2)
 #define QK_HMAP_FREE_VALUE   (1 << 3)
+#define QK_HMAP_FREE_ALL     (QK_HMAP_FREE_KEY | QK_HMAP_FREE_VALUE)
 /* dup key/value when overwrinting(only applied to value)/creating
    unsing kvallocator alloc(newsz != 0) */
 #define QK_HMAP_DUP_KEY      (1 << 4)
 #define QK_HMAP_DUP_VALUE    (1 << 5)
+#define QK_HMAP_DUP_ALL      (QK_HMAP_DUP_KEY | QK_HMAP_DUP_VALUE)
 
 typedef struct qk_hmap_node {
     void *key, *value;
