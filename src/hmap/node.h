@@ -9,13 +9,13 @@ static qk_hmap_node *create_node(qk_hmap *m, void *k, void *v)
 
     bool kalloc = false;
     if (m->flags & QK_HMAP_DUP_KEY) {
-        k = m->alloc_key(m->kvallocator, k, 0, 1);
+        k = m->alloc_key(m->allocator, k, 0, 1);
         if (k == NULL) goto free_node_err;
         kalloc = true;
     }
 
     if (m->flags & QK_HMAP_DUP_VALUE) {
-        v = m->alloc_value(m->kvallocator, v, 0, 1);
+        v = m->alloc_value(m->allocator, v, 0, 1);
         if (v == NULL) goto free_key_err;
     }
 
@@ -26,7 +26,7 @@ static qk_hmap_node *create_node(qk_hmap *m, void *k, void *v)
 
 free_key_err:
     if (kalloc)
-        m->alloc_key(m->kvallocator, k, 0, 0);
+        m->alloc_key(m->allocator, k, 0, 0);
 free_node_err:
     m->allocator->alloc(m->allocator, n, sizeof(qk_hmap_node), 0);
     return NULL;
@@ -35,8 +35,8 @@ free_node_err:
 static void free_node(qk_hmap *m, qk_hmap_node *n)
 {
     if (m->flags & QK_HMAP_FREE_KEY)
-        m->alloc_key(m->kvallocator, n->key, 0, 0);
+        m->alloc_key(m->allocator, n->key, 0, 0);
     if (m->flags & QK_HMAP_FREE_VALUE)
-        m->alloc_value(m->kvallocator, n->value, 0, 0);
+        m->alloc_value(m->allocator, n->value, 0, 0);
     m->allocator->alloc(m->allocator, n, sizeof(qk_hmap_node), 0);
 }

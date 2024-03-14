@@ -29,7 +29,6 @@ QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int 
     m->table = t;
     m->cap = cap;
     m->alloc_key = m->alloc_value = NULL;
-    m->kvallocator = NULL;
     m->allocator = a;
     return QK_OK;
 }
@@ -69,12 +68,12 @@ QKAPI int qk_hmap_set(qk_hmap *m, void *key, void *value)
             oldvalue = node->value;
 
             if (m->flags & QK_HMAP_DUP_VALUE) {
-                newvalue = m->alloc_value(m->kvallocator, value, 0, 1);
+                newvalue = m->alloc_value(m->allocator, value, 0, 1);
                 if (newvalue == NULL) return QK_ERRNO;
             }
 
             if ((m->flags & QK_HMAP_FREE_VALUE) && newvalue != oldvalue)
-                m->alloc_value(m->kvallocator, oldvalue, 0, 0);
+                m->alloc_value(m->allocator, oldvalue, 0, 0);
 
             node->value = newvalue;
             return QK_OK;
