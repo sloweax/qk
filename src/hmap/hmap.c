@@ -36,11 +36,7 @@ QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int 
 
 QKAPI void qk_hmap_free(qk_hmap *m)
 {
-    qk_hmap_node *node, *next;
-    for (size_t i = 0; i < m->cap; i++) {
-        for (node = m->table[i]; node && (next = node->next, 1); node = next)
-            free_node(m, node);
-    }
+    qk_hmap_clear(m);
 
     if (m->flags & QK_HMAP_TABLE_ALLOC)
         m->allocator->alloc(m->allocator, m->table, sizeof(qk_hmap_node*) * m->cap, 0);
