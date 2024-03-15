@@ -4,6 +4,14 @@
 #include <assert.h>
 #include <string.h>
 
+int all_node_null(const qk_hmap *m)
+{
+    for (size_t i = 0; i < m->cap; i++) {
+        if (m->table[i] != NULL) return 0;
+    }
+    return 1;
+}
+
 void test_hmap()
 {
     qk_hmap m;
@@ -82,6 +90,10 @@ void test_hmap()
     ASSERT(strcmp(qk_hmap_get(&m6, abc)->value, "123") == 0);
     ASSERT((char*)qk_hmap_get(&m6, "123")->value != abc);
     ASSERT((char*)qk_hmap_get(&m6, "abc")->value != one23);
+    ASSERT(m6.len == 2);
+    qk_hmap_clear(&m6);
+    ASSERT(m6.len == 0);
+    ASSERT(all_node_null(&m6));
 
     qk_hmap_free(&m);
     qk_hmap_free(&m2);

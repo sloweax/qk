@@ -1,6 +1,7 @@
 #include "../../include/qk.h"
 #include "../../include/qk/hmap.h"
-#include "node.h"
+#include "create_node.h"
+#include "free_node.h"
 #include <string.h>
 
 QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*), qk_allocator *a)
@@ -19,9 +20,9 @@ QKAPI qk_hmap *qk_hmap_create(size_t cap, size_t (*hash)(const void*), int (*cmp
 QKAPI int qk_hmap_init(qk_hmap *m, size_t cap, size_t (*hash)(const void*), int (*cmp)(const void*, const void*), qk_allocator *a)
 {
     if (cap == 0 || cmp == NULL || hash == NULL) return QK_INVALID;
-    qk_hmap_node **t = a->alloc(a, NULL, 0, sizeof(qk_hmap_node*) * cap);
+    qk_hmap_node **t = a->alloc(a, NULL, 0, sizeof(qk_hmap_node*[cap]));
     if (t == NULL) return QK_ERRNO;
-    bzero(t, sizeof(qk_hmap_node*) * cap);
+    memset(t, 0, sizeof(qk_hmap_node*[cap]));
     m->len = 0;
     m->flags = QK_HMAP_TABLE_ALLOC;
     m->cmp = cmp;

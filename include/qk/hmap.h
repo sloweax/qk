@@ -62,6 +62,8 @@ DESCRIPTION
 
     `qk_hmap_delete` will remove and free the node of `key`
 
+    `qk_hmap_clear` will remove and free all nodes
+
 RETURN VALUE
     `qk_hmap_set` returns `QK_OK` on success. `QK_ERRNO` on error
 
@@ -71,6 +73,7 @@ RETURN VALUE
 QKAPI int qk_hmap_set(qk_hmap *m, void *key, void *value);
 QKAPI qk_hmap_node *qk_hmap_get(const qk_hmap *m, const void *key);
 QKAPI void qk_hmap_delete(qk_hmap *m, void *key);
+QKAPI void qk_hmap_clear(qk_hmap *m);
 
 /*
 DESCRIPTION
