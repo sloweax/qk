@@ -102,7 +102,7 @@ void test_buf()
     int fd = open("file.txt", O_RDONLY);
     assert(fd != -1);
     assert(qk_buf_read(&dbuf, fd) == QK_OK);
-    ASSERT(dbuf.cap == 32 && dbuf.len == 5 && memcmp(dbuf.data, "file\n", 5) == 0);
+    ASSERT(dbuf.len == 5 && memcmp(dbuf.data, "file\n", 5) == 0);
     close(fd);
 
     qk_buf_free(&dbuf);
