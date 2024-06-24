@@ -80,39 +80,39 @@ static token atan_token(token a);
 
 static token pow_token(token a, token b)
 {
-    float af, bf;
+    double ad, bd;
     token r;
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
-        af = ((float)a.value.i);
+    case QK_EVAL_RESULT_LONG:
+        ad = ((double)a.value.l);
         break;
     default:
-        af = a.value.f;
+        ad = a.value.d;
         break;
     }
     switch (b.value.type) {
-    case QK_EVAL_RESULT_INT:
-        bf = ((float)b.value.i);
+    case QK_EVAL_RESULT_LONG:
+        bd = ((double)b.value.l);
         break;
     default:
-        bf = b.value.f;
+        bd = b.value.d;
         break;
     }
     r.type = a.type;
-    r.value.type = QK_EVAL_RESULT_FLOAT;
-    r.value.f = powf(af, bf);
+    r.value.type = QK_EVAL_RESULT_DOUBLE;
+    r.value.d = pow(ad, bd);
     return r;
 }
 
 static token sqrt_token(token a)
 {
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
-        a.value.type = QK_EVAL_RESULT_FLOAT;
-        a.value.f = sqrtf((float)a.value.i);
+    case QK_EVAL_RESULT_LONG:
+        a.value.type = QK_EVAL_RESULT_DOUBLE;
+        a.value.d = sqrt((double)a.value.l);
         return a;
-    case QK_EVAL_RESULT_FLOAT:
-        a.value.f = sqrtf(a.value.f);
+    case QK_EVAL_RESULT_DOUBLE:
+        a.value.d = sqrt(a.value.d);
         return a;
     default:
         return a;
@@ -122,12 +122,12 @@ static token sqrt_token(token a)
 static token atan_token(token a)
 {
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
-        a.value.type = QK_EVAL_RESULT_FLOAT;
-        a.value.f = atanf((float)a.value.i);
+    case QK_EVAL_RESULT_LONG:
+        a.value.type = QK_EVAL_RESULT_DOUBLE;
+        a.value.d = atan((double)a.value.l);
         return a;
-    case QK_EVAL_RESULT_FLOAT:
-        a.value.f = atanf(a.value.f);
+    case QK_EVAL_RESULT_DOUBLE:
+        a.value.d = atan(a.value.d);
         return a;
     default:
         return a;
@@ -137,12 +137,12 @@ static token atan_token(token a)
 static token tan_token(token a)
 {
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
-        a.value.type = QK_EVAL_RESULT_FLOAT;
-        a.value.f = tanf((float)a.value.i);
+    case QK_EVAL_RESULT_LONG:
+        a.value.type = QK_EVAL_RESULT_DOUBLE;
+        a.value.d = tan((double)a.value.l);
         return a;
-    case QK_EVAL_RESULT_FLOAT:
-        a.value.f = tanf(a.value.f);
+    case QK_EVAL_RESULT_DOUBLE:
+        a.value.d = tan(a.value.d);
         return a;
     default:
         return a;
@@ -152,12 +152,12 @@ static token tan_token(token a)
 static token sin_token(token a)
 {
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
-        a.value.type = QK_EVAL_RESULT_FLOAT;
-        a.value.f = sinf((float)a.value.i);
+    case QK_EVAL_RESULT_LONG:
+        a.value.type = QK_EVAL_RESULT_DOUBLE;
+        a.value.d = sin((double)a.value.l);
         return a;
-    case QK_EVAL_RESULT_FLOAT:
-        a.value.f = sinf(a.value.f);
+    case QK_EVAL_RESULT_DOUBLE:
+        a.value.d = sin(a.value.d);
         return a;
     default:
         return a;
@@ -167,12 +167,12 @@ static token sin_token(token a)
 static token asin_token(token a)
 {
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
-        a.value.type = QK_EVAL_RESULT_FLOAT;
-        a.value.f = asinf((float)a.value.i);
+    case QK_EVAL_RESULT_LONG:
+        a.value.type = QK_EVAL_RESULT_DOUBLE;
+        a.value.d = asin((double)a.value.l);
         return a;
-    case QK_EVAL_RESULT_FLOAT:
-        a.value.f = asinf(a.value.f);
+    case QK_EVAL_RESULT_DOUBLE:
+        a.value.d = asin(a.value.d);
         return a;
     default:
         return a;
@@ -182,12 +182,12 @@ static token asin_token(token a)
 static token cos_token(token a)
 {
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
-        a.value.type = QK_EVAL_RESULT_FLOAT;
-        a.value.f = cosf((float)a.value.i);
+    case QK_EVAL_RESULT_LONG:
+        a.value.type = QK_EVAL_RESULT_DOUBLE;
+        a.value.d = cos((double)a.value.l);
         return a;
-    case QK_EVAL_RESULT_FLOAT:
-        a.value.f = cosf(a.value.f);
+    case QK_EVAL_RESULT_DOUBLE:
+        a.value.d = cos(a.value.d);
         return a;
     default:
         return a;
@@ -197,12 +197,12 @@ static token cos_token(token a)
 static token acos_token(token a)
 {
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
-        a.value.type = QK_EVAL_RESULT_FLOAT;
-        a.value.f = acosf((float)a.value.i);
+    case QK_EVAL_RESULT_LONG:
+        a.value.type = QK_EVAL_RESULT_DOUBLE;
+        a.value.d = acos((double)a.value.l);
         return a;
-    case QK_EVAL_RESULT_FLOAT:
-        a.value.f = acosf(a.value.f);
+    case QK_EVAL_RESULT_DOUBLE:
+        a.value.d = acos(a.value.d);
         return a;
     default:
         return a;
@@ -212,10 +212,10 @@ static token acos_token(token a)
 static bool is_zero_token(token a)
 {
     switch(a.value.type) {
-    case QK_EVAL_RESULT_FLOAT:
-        return a.value.f == 0.0;
-    case QK_EVAL_RESULT_INT:
-        return a.value.i == 0;
+    case QK_EVAL_RESULT_DOUBLE:
+        return a.value.d == 0.0;
+    case QK_EVAL_RESULT_LONG:
+        return a.value.l == 0;
     default:
         return true;
     }
@@ -224,11 +224,11 @@ static bool is_zero_token(token a)
 static token neg_token(token a)
 {
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
-        a.value.i = -a.value.i;
+    case QK_EVAL_RESULT_LONG:
+        a.value.l = -a.value.l;
         break;
-    case QK_EVAL_RESULT_FLOAT:
-        a.value.f = -a.value.f;
+    case QK_EVAL_RESULT_DOUBLE:
+        a.value.d = -a.value.d;
         break;
     }
     return a;
@@ -238,26 +238,26 @@ static token mul_token(token a, token b)
 {
     token r;
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
+    case QK_EVAL_RESULT_LONG:
         switch (b.value.type) {
-        case QK_EVAL_RESULT_INT:
-            r.value.type = QK_EVAL_RESULT_INT;
-            r.value.i = a.value.i * b.value.i;
+        case QK_EVAL_RESULT_LONG:
+            r.value.type = QK_EVAL_RESULT_LONG;
+            r.value.l = a.value.l * b.value.l;
             break;
-        case QK_EVAL_RESULT_FLOAT:
-            r.value.type = QK_EVAL_RESULT_FLOAT;
-            r.value.f = (float)a.value.i * b.value.f;
+        case QK_EVAL_RESULT_DOUBLE:
+            r.value.type = QK_EVAL_RESULT_DOUBLE;
+            r.value.d = (double)a.value.l * b.value.d;
             break;
         }
         break;
-    case QK_EVAL_RESULT_FLOAT:
-        r.value.type = QK_EVAL_RESULT_FLOAT;
+    case QK_EVAL_RESULT_DOUBLE:
+        r.value.type = QK_EVAL_RESULT_DOUBLE;
         switch (b.value.type) {
-        case QK_EVAL_RESULT_INT:
-            r.value.f = a.value.f * (float)b.value.i;
+        case QK_EVAL_RESULT_LONG:
+            r.value.d = a.value.d * (double)b.value.l;
             break;
-        case QK_EVAL_RESULT_FLOAT:
-            r.value.f = a.value.f * b.value.f;
+        case QK_EVAL_RESULT_DOUBLE:
+            r.value.d = a.value.d * b.value.d;
             break;
         }
         break;
@@ -272,26 +272,26 @@ static token div_token(token a, token b)
     if (is_zero_token(b)) return (token){.type = TOK_INVALID};
 
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
+    case QK_EVAL_RESULT_LONG:
         switch (b.value.type) {
-        case QK_EVAL_RESULT_INT:
-            r.value.type = QK_EVAL_RESULT_INT;
-            r.value.i = a.value.i / b.value.i;
+        case QK_EVAL_RESULT_LONG:
+            r.value.type = QK_EVAL_RESULT_LONG;
+            r.value.l = a.value.l / b.value.l;
             break;
-        case QK_EVAL_RESULT_FLOAT:
-            r.value.type = QK_EVAL_RESULT_FLOAT;
-            r.value.f = (float)a.value.i / b.value.f;
+        case QK_EVAL_RESULT_DOUBLE:
+            r.value.type = QK_EVAL_RESULT_DOUBLE;
+            r.value.d = (double)a.value.l / b.value.d;
             break;
         }
         break;
-    case QK_EVAL_RESULT_FLOAT:
-        r.value.type = QK_EVAL_RESULT_FLOAT;
+    case QK_EVAL_RESULT_DOUBLE:
+        r.value.type = QK_EVAL_RESULT_DOUBLE;
         switch (b.value.type) {
-        case QK_EVAL_RESULT_INT:
-            r.value.f = a.value.f / (float)b.value.i;
+        case QK_EVAL_RESULT_LONG:
+            r.value.d = a.value.d / (double)b.value.l;
             break;
-        case QK_EVAL_RESULT_FLOAT:
-            r.value.f = a.value.f / b.value.f;
+        case QK_EVAL_RESULT_DOUBLE:
+            r.value.d = a.value.d / b.value.d;
             break;
         }
         break;
@@ -303,26 +303,26 @@ static token add_token(token a, token b)
 {
     token r;
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
+    case QK_EVAL_RESULT_LONG:
         switch (b.value.type) {
-        case QK_EVAL_RESULT_INT:
-            r.value.type = QK_EVAL_RESULT_INT;
-            r.value.i = a.value.i + b.value.i;
+        case QK_EVAL_RESULT_LONG:
+            r.value.type = QK_EVAL_RESULT_LONG;
+            r.value.l = a.value.l + b.value.l;
             break;
-        case QK_EVAL_RESULT_FLOAT:
-            r.value.type = QK_EVAL_RESULT_FLOAT;
-            r.value.f = (float)a.value.i + b.value.f;
+        case QK_EVAL_RESULT_DOUBLE:
+            r.value.type = QK_EVAL_RESULT_DOUBLE;
+            r.value.d = (double)a.value.l + b.value.d;
             break;
         }
         break;
-    case QK_EVAL_RESULT_FLOAT:
-        r.value.type = QK_EVAL_RESULT_FLOAT;
+    case QK_EVAL_RESULT_DOUBLE:
+        r.value.type = QK_EVAL_RESULT_DOUBLE;
         switch (b.value.type) {
-        case QK_EVAL_RESULT_INT:
-            r.value.f = a.value.f + (float)b.value.i;
+        case QK_EVAL_RESULT_LONG:
+            r.value.d = a.value.d + (double)b.value.l;
             break;
-        case QK_EVAL_RESULT_FLOAT:
-            r.value.f = a.value.f + b.value.f;
+        case QK_EVAL_RESULT_DOUBLE:
+            r.value.d = a.value.d + b.value.d;
             break;
         }
         break;
@@ -334,26 +334,26 @@ static token sub_token(token a, token b)
 {
     token r;
     switch (a.value.type) {
-    case QK_EVAL_RESULT_INT:
+    case QK_EVAL_RESULT_LONG:
         switch (b.value.type) {
-        case QK_EVAL_RESULT_INT:
-            r.value.type = QK_EVAL_RESULT_INT;
-            r.value.i = a.value.i - b.value.i;
+        case QK_EVAL_RESULT_LONG:
+            r.value.type = QK_EVAL_RESULT_LONG;
+            r.value.l = a.value.l - b.value.l;
             break;
-        case QK_EVAL_RESULT_FLOAT:
-            r.value.type = QK_EVAL_RESULT_FLOAT;
-            r.value.f = (float)a.value.i - b.value.f;
+        case QK_EVAL_RESULT_DOUBLE:
+            r.value.type = QK_EVAL_RESULT_DOUBLE;
+            r.value.d = (double)a.value.l - b.value.d;
             break;
         }
         break;
-    case QK_EVAL_RESULT_FLOAT:
-        r.value.type = QK_EVAL_RESULT_FLOAT;
+    case QK_EVAL_RESULT_DOUBLE:
+        r.value.type = QK_EVAL_RESULT_DOUBLE;
         switch (b.value.type) {
-        case QK_EVAL_RESULT_INT:
-            r.value.f = a.value.f - (float)b.value.i;
+        case QK_EVAL_RESULT_LONG:
+            r.value.d = a.value.d - (double)b.value.l;
             break;
-        case QK_EVAL_RESULT_FLOAT:
-            r.value.f = a.value.f - b.value.f;
+        case QK_EVAL_RESULT_DOUBLE:
+            r.value.d = a.value.d - b.value.d;
             break;
         }
         break;
@@ -385,11 +385,11 @@ static token get_token(const char **p)
     errno = 0;
     l = strtol(*p, &end, 0);
     if (end != *p && *end != '.') {
-        tok.value.type = QK_EVAL_RESULT_INT;
+        tok.value.type = QK_EVAL_RESULT_LONG;
         tok.type = TOK_NUM;
-        if (errno || (l > INT_MAX || l < INT_MIN))
+        if (errno)
             tok.type = TOK_INVALID;
-        tok.value.i = l;
+        tok.value.l = l;
         tok.len = end - *p;
         *p = end;
         return tok;
@@ -397,9 +397,9 @@ static token get_token(const char **p)
 
     if (*end == '.') {
         errno = 0;
-        tok.value.f = strtof(*p, &end);
+        tok.value.d = strtod(*p, &end);
         if (end != *p) {
-            tok.value.type = QK_EVAL_RESULT_FLOAT;
+            tok.value.type = QK_EVAL_RESULT_DOUBLE;
             tok.type = TOK_NUM;
             if (errno)
                 tok.type = TOK_INVALID;
@@ -640,27 +640,27 @@ QKAPI int qk_eval(const char *str, qk_eval_result *r)
     return QK_OK;
 }
 
-QKAPI int qk_eval_i(const char *str, int *r)
+QKAPI int qk_eval_l(const char *str, long *r)
 {
     qk_eval_result result;
     int s = qk_eval(str, &result);
     if (s != QK_OK) return s;
-    if (result.type != QK_EVAL_RESULT_INT) return QK_INVALID;
-    if (r) *r = result.i;
+    if (result.type != QK_EVAL_RESULT_LONG) return QK_INVALID;
+    if (r) *r = result.l;
     return QK_OK;
 }
 
-QKAPI int qk_eval_f(const char *str, float *r)
+QKAPI int qk_eval_d(const char *str, double *r)
 {
     qk_eval_result result;
     int s = qk_eval(str, &result);
     if (s != QK_OK) return s;
     switch (result.type) {
-    case QK_EVAL_RESULT_FLOAT:
-        if (r) *r = result.f;
+    case QK_EVAL_RESULT_DOUBLE:
+        if (r) *r = result.d;
         break;
-    case QK_EVAL_RESULT_INT:
-        if (r) *r = (float)result.i;
+    case QK_EVAL_RESULT_LONG:
+        if (r) *r = (double)result.l;
         break;
     }
     return QK_OK;

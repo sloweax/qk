@@ -3,15 +3,15 @@
 #include "error.h"
 
 typedef enum {
-    QK_EVAL_RESULT_INT,
-    QK_EVAL_RESULT_FLOAT,
+    QK_EVAL_RESULT_LONG,
+    QK_EVAL_RESULT_DOUBLE,
 } qk_eval_result_type;
 
 typedef struct {
     qk_eval_result_type type;
     union {
-        int i;
-        float f;
+        long l;
+        double d;
     };
 } qk_eval_result;
 
@@ -29,5 +29,5 @@ RETURN VALUE
 */
 
 QKAPI int qk_eval(const char *str, qk_eval_result *r);
-QKAPI int qk_eval_i(const char *str, int *r);
-QKAPI int qk_eval_f(const char *str, float *r);
+QKAPI int qk_eval_l(const char *str, long *r);
+QKAPI int qk_eval_d(const char *str, double *r);

@@ -14,40 +14,40 @@
 
 void test_eval()
 {
-    int i = 0;
-    float f = 0;
-    ASSERT(qk_eval_i("", NULL) == QK_INVALID);
-    ASSERT(qk_eval_i("$", NULL) == QK_INVALID);
-    ASSERT(qk_eval_i("1.0", NULL) == QK_INVALID);
-    ASSERT(qk_eval_i("-((2+8)*(1+1))/0", NULL) == QK_INVALID);
-    ASSERT(qk_eval_i("(2+8)*(1+1", NULL) == QK_INVALID);
-    ASSERT(qk_eval_i("1+2/-2+1+$", NULL) == QK_INVALID);
-    ASSERT(qk_eval_i("1*", NULL) == QK_INVALID);
-    ASSERT(qk_eval_i("1/*2", NULL) == QK_INVALID);
-    ASSERT(qk_eval_i("9999999999999999999999999999999999999999", NULL) == QK_ERRNO && errno == ERANGE);
-    ASSERT(qk_eval_i("--++1", &i) == QK_OK && i == 1);
-    ASSERT(qk_eval_i("----1", &i) == QK_OK && i == 1);
-    ASSERT(qk_eval_i("--+-1", &i) == QK_OK && i == -1);
+    long l = 0;
+    double d = 0;
+    ASSERT(qk_eval_l("", NULL) == QK_INVALID);
+    ASSERT(qk_eval_l("$", NULL) == QK_INVALID);
+    ASSERT(qk_eval_l("1.0", NULL) == QK_INVALID);
+    ASSERT(qk_eval_l("-((2+8)*(1+1))/0", NULL) == QK_INVALID);
+    ASSERT(qk_eval_l("(2+8)*(1+1", NULL) == QK_INVALID);
+    ASSERT(qk_eval_l("1+2/-2+1+$", NULL) == QK_INVALID);
+    ASSERT(qk_eval_l("1*", NULL) == QK_INVALID);
+    ASSERT(qk_eval_l("1/*2", NULL) == QK_INVALID);
+    ASSERT(qk_eval_l("9999999999999999999999999999999999999999", NULL) == QK_ERRNO && errno == ERANGE);
+    ASSERT(qk_eval_l("--++1", &l) == QK_OK && l == 1);
+    ASSERT(qk_eval_l("----1", &l) == QK_OK && l == 1);
+    ASSERT(qk_eval_l("--+-1", &l) == QK_OK && l == -1);
 
-    ASSERT(qk_eval_f("9999999999999999999999999999999999999999", NULL) == QK_ERRNO && errno == ERANGE);
-    ASSERT(qk_eval_f("1.0/0.0", NULL) == QK_INVALID);
-    ASSERT(qk_eval_f("10", &f) == QK_OK && f == 10.0);
+    ASSERT(qk_eval_d("9999999999999999999999999999999999999999", NULL) == QK_ERRNO && errno == ERANGE);
+    ASSERT(qk_eval_d("1.0/0.0", NULL) == QK_INVALID);
+    ASSERT(qk_eval_d("10", &d) == QK_OK && d == 10.0);
 
-    ASSERT_EVAL(qk_eval_i, i, -1);
-    ASSERT_EVAL(qk_eval_i, i, +1);
-    ASSERT_EVAL(qk_eval_i, i, 1+1);
-    ASSERT_EVAL(qk_eval_i, i, 0x01);
-    ASSERT_EVAL(qk_eval_i, i, 01);
-    ASSERT_EVAL(qk_eval_i, i, 0123+123+0x123);
-    ASSERT_EVAL(qk_eval_i, i, (2+8)*(1+1));
-    ASSERT_EVAL(qk_eval_i, i, ((2+8)*(1+1)));
-    ASSERT_EVAL(qk_eval_i, i, -((2+8)*(1+1)));
-    ASSERT_EVAL(qk_eval_i, i, 1+2*2+1);
-    ASSERT_EVAL(qk_eval_i, i, 1+2/2+1);
-    ASSERT_EVAL(qk_eval_i, i, 1+2/-2+1);
+    ASSERT_EVAL(qk_eval_l, l, -1);
+    ASSERT_EVAL(qk_eval_l, l, +1);
+    ASSERT_EVAL(qk_eval_l, l, 1+1);
+    ASSERT_EVAL(qk_eval_l, l, 0x01);
+    ASSERT_EVAL(qk_eval_l, l, 01);
+    ASSERT_EVAL(qk_eval_l, l, 0123+123+0x123);
+    ASSERT_EVAL(qk_eval_l, l, (2+8)*(1+1));
+    ASSERT_EVAL(qk_eval_l, l, ((2+8)*(1+1)));
+    ASSERT_EVAL(qk_eval_l, l, -((2+8)*(1+1)));
+    ASSERT_EVAL(qk_eval_l, l, 1+2*2+1);
+    ASSERT_EVAL(qk_eval_l, l, 1+2/2+1);
+    ASSERT_EVAL(qk_eval_l, l, 1+2/-2+1);
 
-    ASSERT_EVAL(qk_eval_f, f, 1.0);
-    ASSERT_EVAL(qk_eval_f, f, -1.0);
-    ASSERT_EVAL(qk_eval_f, f, (2.+8.)*(1.+1.));
-    ASSERT_EVAL(qk_eval_f, f, pow(sqrt(9), 2));
+    ASSERT_EVAL(qk_eval_d, d, 1.0);
+    ASSERT_EVAL(qk_eval_d, d, -1.0);
+    ASSERT_EVAL(qk_eval_d, d, (2.+8.)*(1.+1.));
+    ASSERT_EVAL(qk_eval_d, d, pow(sqrt(9), 2));
 }
